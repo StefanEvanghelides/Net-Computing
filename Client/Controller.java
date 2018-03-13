@@ -4,7 +4,8 @@ public class Controller {
 	private ComplaintAPI complaint;
 	
 	public Controller() {
-		
+		message = new MessageAPI();
+		complaint = new ComplaintAPI();
 	}
 	
 	public void sendComplaint() {

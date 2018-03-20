@@ -1,7 +1,5 @@
+import java.io.IOException;
 
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
 
 public class Controller {
 	private MessageAPI message;
@@ -24,7 +22,7 @@ public class Controller {
 		String result;
 		try {
 			result = complaint.GET(endpoint);
-		} catch(Exception e) {
+		} catch (IOException e){
 			e.printStackTrace();
 			result = "failed";
 		}

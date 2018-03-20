@@ -1,4 +1,8 @@
 
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+
 public class Controller {
 	private MessageAPI message;
 	private ComplaintAPI complaint;
@@ -14,6 +18,18 @@ public class Controller {
 	
 	public void sendMessage() {
 		
+	}
+
+	public String receiveComplaint(String endpoint) {
+		String result;
+		try {
+			result = complaint.GET(endpoint);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "failed";
+		}
+
+		return result;
 	}
 	
 	

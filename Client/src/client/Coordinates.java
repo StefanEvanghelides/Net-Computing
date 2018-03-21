@@ -1,3 +1,4 @@
+package client;
 
 public class Coordinates {
 	private double latitude;

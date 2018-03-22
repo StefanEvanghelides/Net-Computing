@@ -23,13 +23,17 @@ public class Controller {
 		
 	}
 
-	public ArrayList<Complaint> receiveComplaint(String endpoint) throws IOException, ParseException {
-		ArrayList<Complaint> c;
-		
-		c = complaintAPI.GET(endpoint);
-
+	
+	public ArrayList<Complaint> receiveComplaintList(String endpoint) throws IOException, ParseException {
+		ArrayList<Complaint> c = complaintAPI.retrieveComplaintList(endpoint);
 		return c;
 	}
+	
+	public Complaint receiveComplaint(String endpoint) throws IOException, ParseException {
+		Complaint c = complaintAPI.retrieveComplaint(endpoint);
+		return c;
+	}
+	
 	
 	
 	/* Getters and setters. */

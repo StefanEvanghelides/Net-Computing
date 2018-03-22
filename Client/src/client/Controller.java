@@ -1,14 +1,18 @@
 package client;
+
 import java.io.IOException;
+import java.util.ArrayList;
+
+import client.json.parser.ParseException;
 
 
 public class Controller {
-	private MessageAPI message;
-	private ComplaintAPI complaint;
+	private MessageAPI messageAPI;
+	private ComplaintAPI complaintAPI;
 	
 	public Controller() {
-		message = new MessageAPI();
-		complaint = new ComplaintAPI();
+		messageAPI = new MessageAPI();
+		complaintAPI = new ComplaintAPI();
 	}
 	
 	public void sendComplaint() {
@@ -19,35 +23,31 @@ public class Controller {
 		
 	}
 
-	public String receiveComplaint(String endpoint) {
-		String result;
-		try {
-			result = complaint.GET(endpoint);
-		} catch (IOException e){
-			e.printStackTrace();
-			result = "failed";
-		}
+	public ArrayList<Complaint> receiveComplaint(String endpoint) throws IOException, ParseException {
+		ArrayList<Complaint> c;
+		
+		c = complaintAPI.GET(endpoint);
 
-		return result;
+		return c;
 	}
 	
 	
 	/* Getters and setters. */
 	
 	public MessageAPI getMessage() {
-		return this.message;
+		return this.messageAPI;
 	}
 	
-	public void setMessage(MessageAPI message) {
-		this.message = message;
+	public void setMessage(MessageAPI messageAPI) {
+		this.messageAPI = messageAPI;
 	}
 	
 	public ComplaintAPI getComplaint() {
-		return this.complaint;
+		return this.complaintAPI;
 	}
 	
-	public void setComplaint(ComplaintAPI complaint) {
-		this.complaint = complaint;
+	public void setComplaint(ComplaintAPI complaintAPI) {
+		this.complaintAPI = complaintAPI;
 	}
 	
 }

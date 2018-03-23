@@ -54,10 +54,9 @@ Mkfile.old
 dkms.conf
 
 # Java files
-Client/.project
-Client/.classpath
-**.project
-**.classpath
+.settings/
+.classpath
+.project
 *.class
 .metadata
 bin/
@@ -67,7 +66,6 @@ tmp/
 *.swp
 *~.nib
 local.properties
-**.settings/
 .loadpath
 .recommenders
 

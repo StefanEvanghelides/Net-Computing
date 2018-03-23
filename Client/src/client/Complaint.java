@@ -21,12 +21,13 @@ public class Complaint {
 	
 	@Override
 	public String toString() {
-		return "My complaint:\n" +
+		/*return "My complaint:\n" +
 				"  Type = " + type + "\n" +
 				"  Description = " + description + "\n" +
 				"  Sender IP = " + sender_ip + "\n" +
 				"  Coordinates = " + coords + "\n" +
-				"  Name = " + name + "\n";
+				"  Name = " + name + "\n";*/
+		return type + ": " + description + "\n";
 	}
 	
 }

@@ -1,4 +1,4 @@
-package client;
+package client.backend;
 
 public class Packet {
 

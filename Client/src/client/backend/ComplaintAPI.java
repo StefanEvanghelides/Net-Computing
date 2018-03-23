@@ -1,4 +1,4 @@
-package client;
+package client.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

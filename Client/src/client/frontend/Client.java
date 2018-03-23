@@ -1,4 +1,4 @@
-package client;
+package client.frontend;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 
+import client.backend.Complaint;
+import client.backend.Controller;
 import client.json.parser.ParseException;
 
 public class Client extends JFrame{

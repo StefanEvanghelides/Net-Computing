@@ -1,4 +1,4 @@
-package client;
+package client.backend;
 
 import java.io.IOException;
 import java.util.ArrayList;

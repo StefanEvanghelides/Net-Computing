@@ -26,15 +26,25 @@ public class ComplaintAPI {
 		return c;
 	}
 	
-	public void sendComplaint(Complaint c) {
-		
+	public void sendComplaint(String urlString, Complaint c) throws IOException {
+		String payload = c.serialize();
+		POST(urlString, payload);
 	}
 	
+	
+	
+	
+	
+	/* RESTful API. */
+		
     public String GET(String urlString) throws IOException, ParseException {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(urlString);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    	conn.setReadTimeout(2000);
+        conn.setConnectTimeout(2000);
 		conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String line;
 		while ((line = rd.readLine()) != null) {

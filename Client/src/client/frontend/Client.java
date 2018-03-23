@@ -78,9 +78,10 @@ public class Client extends JFrame{
 	
 	public void testArrays() {		
 		ArrayList<Complaint> complaints = new ArrayList<>();
+		String urlString = "https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Array";
 		
 		try {
-			complaints = this.getController().receiveComplaintList("https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Array");
+			complaints = this.getController().receiveComplaintList(urlString);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
@@ -94,19 +95,37 @@ public class Client extends JFrame{
 	}
 	
 	public void testComplaint() {
-		
+		String urlString = "https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Complaint";
 		try {
-			Complaint c = this.getController().receiveComplaint("https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Complaint");
+			Complaint c = this.getController().receiveComplaint(urlString);
 			System.out.println(c.toString());
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public void testPost() {
+		String type = "new type";
+        String description =  "someDescription";
+        String senderIp = "My IP";
+        String location =  "mylocation";
+        String name = "name";
+        
+        String urlString = "https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/postTest";
+        
+        try {
+			controller.sendComplaint(urlString, type, description, senderIp, location, name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 
 	/* Main function. */
 	public static void main(String[] args) {
-		new Client();
+		Client A = new Client();
+		A.testPost();
 	}
 
 }

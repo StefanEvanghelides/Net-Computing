@@ -15,10 +15,10 @@ public class Controller {
 		complaintAPI = new ComplaintAPI();
 	}
 	
-//	public void sendComplaint() {
-//		Complaint c = new Complaint();
-//		complanintAPI.send
-//	}
+	public void sendComplaint(String urlString, String type, String description, String sender_ip, String coords, String name) throws IOException {
+		Complaint c = new Complaint(type, description, sender_ip, coords, name);
+		complaintAPI.sendComplaint(urlString, c);
+	}
 	
 	public void sendMessage() {
 		

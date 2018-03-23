@@ -54,6 +54,8 @@ Mkfile.old
 dkms.conf
 
 # Java files
+Client/.project
+Client/.classpath
 **.project
 **.classpath
 *.class

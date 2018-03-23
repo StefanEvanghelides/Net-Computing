@@ -15,9 +15,10 @@ public class Controller {
 		complaintAPI = new ComplaintAPI();
 	}
 	
-	public void sendComplaint() {
-		
-	}
+//	public void sendComplaint() {
+//		Complaint c = new Complaint();
+//		complanintAPI.send
+//	}
 	
 	public void sendMessage() {
 		
@@ -34,24 +35,5 @@ public class Controller {
 		return c;
 	}
 	
-	
-	
-	/* Getters and setters. */
-	
-	public MessageAPI getMessage() {
-		return this.messageAPI;
-	}
-	
-	public void setMessage(MessageAPI messageAPI) {
-		this.messageAPI = messageAPI;
-	}
-	
-	public ComplaintAPI getComplaint() {
-		return this.complaintAPI;
-	}
-	
-	public void setComplaint(ComplaintAPI complaintAPI) {
-		this.complaintAPI = complaintAPI;
-	}
 	
 }

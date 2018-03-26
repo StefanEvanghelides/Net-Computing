@@ -70,7 +70,7 @@ public class Client extends JFrame implements ActionListener{
 	
 	public void updateComplaintInfoPane() {
 		Complaint c = this.complaintsList.getSelectedValue();
-		this.complaintInfoPane.setText(c != null ? c.toString() : "");
+		this.complaintInfoPane.setText(c != null ? c.getFullDescription() : "");
 	}
 	
 	
@@ -97,10 +97,10 @@ public class Client extends JFrame implements ActionListener{
 	private void initialiseButtons() {
 		this.refreshComplaintsListButton = new JButton("Refresh");
 		this.addComplaintButton = new JButton("Add");
-		
+	
 		this.refreshComplaintsListButton.addActionListener(this);
-		this.addComplaintButton.addActionListener(this);
-		
+		this.addComplaintButton.addActionListener(this);		
+	
 		this.contentPanel.add(refreshComplaintsListButton);
 		this.contentPanel.add(addComplaintButton);
 	}

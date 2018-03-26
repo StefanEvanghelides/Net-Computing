@@ -15,9 +15,12 @@ public class Controller {
 		complaintAPI = new ComplaintAPI();
 	}
 	
-	public void sendComplaint() {
-		
+	public void sendComplaint(String urlString, String type, String description, String sender_ip, String coords, String name) throws IOException {
+		Complaint c = new Complaint(type, description, sender_ip, coords, name);
+		complaintAPI.sendComplaint(urlString, c);
 	}
+	
+	public void sendComplaint() {}
 	
 	public void sendMessage() {
 		
@@ -34,24 +37,5 @@ public class Controller {
 		return c;
 	}
 	
-	
-	
-	/* Getters and setters. */
-	
-	public MessageAPI getMessage() {
-		return this.messageAPI;
-	}
-	
-	public void setMessage(MessageAPI messageAPI) {
-		this.messageAPI = messageAPI;
-	}
-	
-	public ComplaintAPI getComplaint() {
-		return this.complaintAPI;
-	}
-	
-	public void setComplaint(ComplaintAPI complaintAPI) {
-		this.complaintAPI = complaintAPI;
-	}
 	
 }

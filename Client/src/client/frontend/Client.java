@@ -40,7 +40,6 @@ public class Client extends JFrame implements ActionListener{
 		super("Complaint System");
 		
 		this.layout = new SpringLayout();
-		
 		this.setLayout(this.layout);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(640, 480);
@@ -53,27 +52,6 @@ public class Client extends JFrame implements ActionListener{
 		initializeConstraints();
 		
 		this.setVisible(true);
-	}
-
-
-
-	private void initializeConstraints() {		
-		layout.putConstraint(SpringLayout.NORTH, complaintsListPane, 10, SpringLayout.NORTH, contentPanel);
-		layout.putConstraint(SpringLayout.WEST, complaintsListPane, 10, SpringLayout.WEST, contentPanel);
-		layout.putConstraint(SpringLayout.SOUTH, complaintsListPane, -10, SpringLayout.NORTH, refreshComplaintsListButton);
-		layout.putConstraint(SpringLayout.EAST, complaintsListPane, 200, SpringLayout.WEST, complaintsListPane);
-		
-		layout.putConstraint(SpringLayout.WEST, refreshComplaintsListButton, 10, SpringLayout.WEST, contentPanel);
-		layout.putConstraint(SpringLayout.SOUTH, refreshComplaintsListButton, -10, SpringLayout.SOUTH, contentPanel);
-		layout.putConstraint(SpringLayout.EAST, refreshComplaintsListButton, -10, SpringLayout.WEST, addComplaintButton);
-		
-		layout.putConstraint(SpringLayout.SOUTH, addComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
-		layout.putConstraint(SpringLayout.EAST, addComplaintButton, 0, SpringLayout.EAST, complaintsListPane);
-		
-		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
-		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
-		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.SOUTH, contentPanel);
-		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
 
 
@@ -108,7 +86,6 @@ public class Client extends JFrame implements ActionListener{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				Client.this.updateComplaintInfoPane();
-				
 			}
 		});
 		
@@ -133,6 +110,25 @@ public class Client extends JFrame implements ActionListener{
 		this.complaintInfoPane.setEditable(false);
 		this.complaintInfoPane.setContentType("text/html");
 		this.contentPanel.add(this.complaintInfoPane);
+	}
+	
+	private void initializeConstraints() {		
+		layout.putConstraint(SpringLayout.NORTH, complaintsListPane, 10, SpringLayout.NORTH, contentPanel);
+		layout.putConstraint(SpringLayout.WEST, complaintsListPane, 10, SpringLayout.WEST, contentPanel);
+		layout.putConstraint(SpringLayout.SOUTH, complaintsListPane, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.EAST, complaintsListPane, 200, SpringLayout.WEST, complaintsListPane);
+		
+		layout.putConstraint(SpringLayout.WEST, refreshComplaintsListButton, 10, SpringLayout.WEST, contentPanel);
+		layout.putConstraint(SpringLayout.SOUTH, refreshComplaintsListButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, refreshComplaintsListButton, -10, SpringLayout.WEST, addComplaintButton);
+		
+		layout.putConstraint(SpringLayout.SOUTH, addComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, addComplaintButton, 0, SpringLayout.EAST, complaintsListPane);
+		
+		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
+		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
+		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
 	
 	

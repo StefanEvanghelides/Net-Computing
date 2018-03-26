@@ -20,6 +20,8 @@ public class Controller {
 		complaintAPI.sendComplaint(urlString, c);
 	}
 	
+	public void sendComplaint() {}
+	
 	public void sendMessage() {
 		
 	}

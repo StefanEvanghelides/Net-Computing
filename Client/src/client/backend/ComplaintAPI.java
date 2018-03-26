@@ -96,8 +96,5 @@ public class ComplaintAPI {
 		}
 		
 		return complaints;
-	}
-
-	
-	
+	}	
 }

@@ -31,6 +31,8 @@ public class Client extends JFrame implements ActionListener{
 	private JScrollPane complaintsListPane;
 	private JButton refreshComplaintsListButton;
 	private JButton addComplaintButton;
+	private JButton resolveComplaintButton;
+	private JButton sendMessageButton;
 	private JTextPane complaintInfoPane;
 	private JPanel contentPanel;
 	
@@ -85,6 +87,8 @@ public class Client extends JFrame implements ActionListener{
 		this.complaintsList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				Client.this.sendMessageButton.setVisible(!Client.this.complaintsList.isSelectionEmpty());
+				Client.this.resolveComplaintButton.setVisible(!Client.this.complaintsList.isSelectionEmpty());
 				Client.this.updateComplaintInfoPane();
 			}
 		});
@@ -97,12 +101,20 @@ public class Client extends JFrame implements ActionListener{
 	private void initialiseButtons() {
 		this.refreshComplaintsListButton = new JButton("Refresh");
 		this.addComplaintButton = new JButton("Add");
+		this.resolveComplaintButton = new JButton("Resolve");
+		this.resolveComplaintButton.setVisible(false);
+		this.sendMessageButton = new JButton("Send message");
+		this.sendMessageButton.setVisible(false);
 	
 		this.refreshComplaintsListButton.addActionListener(this);
-		this.addComplaintButton.addActionListener(this);		
+		this.addComplaintButton.addActionListener(this);
+		this.resolveComplaintButton.addActionListener(this);
+		this.sendMessageButton.addActionListener(this);
 	
 		this.contentPanel.add(refreshComplaintsListButton);
 		this.contentPanel.add(addComplaintButton);
+		this.contentPanel.add(resolveComplaintButton);
+		this.contentPanel.add(sendMessageButton);
 	}
 
 	private void initialiseComplaintInfoPane() {
@@ -125,9 +137,15 @@ public class Client extends JFrame implements ActionListener{
 		layout.putConstraint(SpringLayout.SOUTH, addComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, addComplaintButton, 0, SpringLayout.EAST, complaintsListPane);
 		
+		layout.putConstraint(SpringLayout.SOUTH, sendMessageButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, sendMessageButton, 0, SpringLayout.EAST, complaintInfoPane);
+		
+		layout.putConstraint(SpringLayout.SOUTH, resolveComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, resolveComplaintButton, -10, SpringLayout.WEST, sendMessageButton);
+		
 		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
-		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.NORTH, sendMessageButton);
 		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
 	
@@ -156,6 +174,16 @@ public class Client extends JFrame implements ActionListener{
 		
 		if(e.getSource() == addComplaintButton) {
 			new AddComplaintFrame(this);
+			return;
+		}
+		
+		if(e.getSource() == sendMessageButton) {
+			new SendMessageFrame(this);
+			return;
+		}
+		
+		if(e.getSource() == resolveComplaintButton) {
+			this.complaintsList.getSelectedValue();
 			return;
 		}
 	}

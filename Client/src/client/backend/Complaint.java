@@ -27,13 +27,17 @@ public class Complaint {
 	
 	@Override
 	public String toString() {
-		/*return "My complaint:\n" +
-				"  Type = " + type + "\n" +
-				"  Description = " + description + "\n" +
-				"  Sender IP = " + sender_ip + "\n" +
-				"  Location = " + location + "\n" +
-				"  Name = " + name + "\n";*/
-		return "<html>" + type + "  <br/>" + location + "<br/><hr/>" + "</html>";
+		return "<html>" + type + "  <br/>" + location + "</html>"; 
+	}
+	
+	public String getFullDescription() {
+		return "My complaint:<br/>" +
+			    "  ID = " + id + "<br/>" + 
+				"  Type = " + type + "<br/>" +
+				"  Description = " + description + "<br/>" +
+				"  Sender IP = " + sender_ip + "<br/>" +
+				"  Location = " + location + "<br/>" +
+				"  Name = " + name + "<br/>";
 	}
 	
 }

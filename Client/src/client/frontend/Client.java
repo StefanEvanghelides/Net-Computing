@@ -70,7 +70,7 @@ public class Client extends JFrame implements ActionListener{
 	
 	public void updateComplaintInfoPane() {
 		Complaint c = this.complaintsList.getSelectedValue();
-		this.complaintInfoPane.setText(c != null ? c.toString() : "");
+		this.complaintInfoPane.setText(c != null ? c.getFullDescription() : "");
 	}
 	
 	
@@ -137,6 +137,7 @@ public class Client extends JFrame implements ActionListener{
 	public Controller getController() {
 		return controller;
 	}
+	
 	
 
 	/* Main function. */

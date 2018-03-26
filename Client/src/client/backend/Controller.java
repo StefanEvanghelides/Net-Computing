@@ -22,6 +22,10 @@ public class Controller {
 	
 	public void sendComplaint() {}
 	
+	public void setResolvedComplaint(String urlString) throws IOException {
+		complaintAPI.setResolvedComplaint(urlString);
+	}
+	
 	public void sendMessage() {
 		
 	}

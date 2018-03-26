@@ -3,6 +3,7 @@ package client.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,11 +29,14 @@ public class ComplaintAPI {
 	
 	public void sendComplaint(String urlString, Complaint c) throws IOException {
 		String payload = c.serialize();
-		POST(urlString, payload);
+		
+		
+
 	}
 	
-	
-	
+	public void setResolvedComplaint(String urlString) throws IOException {
+		PUT(urlString, "resolved");
+	}
 	
 	
 	/* RESTful API. */
@@ -55,14 +59,21 @@ public class ComplaintAPI {
 		return result.toString();
 	}
     
-    public void POST(String urlString, String payload) throws IOException {
+    public void PUT(String urlString, String payload) throws IOException {
     	URL url = new URL(urlString);
     	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     	conn.setDoOutput(true);
     	conn.setReadTimeout(2000);
         conn.setConnectTimeout(2000);
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod("PUT");
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        outputStreamWriter.write(payload);
+        
+        outputStreamWriter.flush();
+        outputStreamWriter.close();
+        
     }
 
     public Complaint deserializeObject(String jsonString) throws ParseException {

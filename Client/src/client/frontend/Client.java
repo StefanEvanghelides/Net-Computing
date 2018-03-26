@@ -1,112 +1,163 @@
 package client.frontend;
 
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SpringLayout;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import client.backend.Complaint;
 import client.backend.Controller;
 import client.json.parser.ParseException;
 
-public class Client extends JFrame{
+public class Client extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	private Controller controller;
 	
 	private ArrayList<Complaint> complaints;
 	
+	private SpringLayout layout;
 	private JList<Complaint> complaintsList;
-	private JButton refreshComplaintsList;
+	private JScrollPane complaintsListPane;
+	private JButton refreshComplaintsListButton;
+	private JButton addComplaintButton;
+	private JTextPane complaintInfoPane;
+	private JPanel contentPanel;
+	
+	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io";
 	
 	public Client() {
-		super("Test");
-		this.setLayout(new FlowLayout());
+		super("Complaint System");
+		
+		this.layout = new SpringLayout();
+		this.setLayout(this.layout);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(640, 480);
+		this.contentPanel = (JPanel) this.getContentPane();
+		this.controller = new Controller();
 		
-		controller = new Controller();
-		this.complaintsList = new JList<Complaint>();		
-		this.complaintsList.setSize(200, 200);
-		this.getContentPane().add(complaintsList);
+		initialiseComplaintsList();
+		initialiseComplaintInfoPane();
+		initialiseButtons();
+		initializeConstraints();
 		
-		this.refreshComplaintsList = new JButton(new AbstractAction("Refresh") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Client.this.updateComplaintsList();
-			}
-		});
-		this.getContentPane().add(refreshComplaintsList);
-		
-		updateComplaintsList();
-		
-		this.pack();
 		this.setVisible(true);
 	}
-	
-	/* Getters and setters. */
-	public Controller getController() {
-		return this.controller;
-	}
-	
-	public void setController(Controller controller) {
-		this.controller = controller;
-	}
-	
 
-	
+
+
 	public void updateComplaintsList() {
 		try {
-			complaints = this.getController().receiveComplaintList("https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Array");
+			this.complaints = this.controller.receiveComplaintList(this.address + "/mock/all");
 		} catch (IOException | ParseException e) { e.printStackTrace(); }
 		
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
 		
-		for(Complaint c : complaints) {
-				model.addElement(c);
-		}
+		for(Complaint c : this.complaints) { model.addElement(c); }
 		
 		this.complaintsList.setModel(model);
 	}
 	
-	public void testArrays() {		
-		ArrayList<Complaint> complaints = new ArrayList<>();
-		
-		try {
-			complaints = this.getController().receiveComplaintList("https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Array");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("My Array:\n");
-		for(int i=0; i<complaints.size(); i++) {
-			System.out.println("Complaint #" + (i+1) + "\n " + complaints.get(i).toString());
-		}
+	public void updateComplaintInfoPane() {
+		Complaint c = this.complaintsList.getSelectedValue();
+		this.complaintInfoPane.setText(c != null ? c.toString() : "");
 	}
 	
-	public void testComplaint() {
+	
+	
+	/* Private helpers */
+	private void initialiseComplaintsList() {
+		this.complaintsList = new JList<Complaint>();
+		this.complaintsList.setFixedCellHeight(40);
+		this.complaintsList.setFixedCellWidth(100);
+		this.complaintsListPane = new JScrollPane(complaintsList);
 		
-		try {
-			Complaint c = this.getController().receiveComplaint("https://6e145bfb-a718-460e-af0f-7fa9c390aad2.mock.pstmn.io/mockTest/Complaint");
-			System.out.println(c.toString());
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
+		this.complaintsList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Client.this.updateComplaintInfoPane();
+			}
+		});
+		
+		updateComplaintsList();
+		
+		this.contentPanel.add(complaintsListPane);
 	}
+	
+	private void initialiseButtons() {
+		this.refreshComplaintsListButton = new JButton("Refresh");
+		this.addComplaintButton = new JButton("Add");
+		
+		this.refreshComplaintsListButton.addActionListener(this);
+		this.addComplaintButton.addActionListener(this);
+		
+		this.contentPanel.add(refreshComplaintsListButton);
+		this.contentPanel.add(addComplaintButton);
+	}
+
+	private void initialiseComplaintInfoPane() {
+		this.complaintInfoPane = new JTextPane();
+		this.complaintInfoPane.setEditable(false);
+		this.complaintInfoPane.setContentType("text/html");
+		this.contentPanel.add(this.complaintInfoPane);
+	}
+	
+	private void initializeConstraints() {		
+		layout.putConstraint(SpringLayout.NORTH, complaintsListPane, 10, SpringLayout.NORTH, contentPanel);
+		layout.putConstraint(SpringLayout.WEST, complaintsListPane, 10, SpringLayout.WEST, contentPanel);
+		layout.putConstraint(SpringLayout.SOUTH, complaintsListPane, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.EAST, complaintsListPane, 200, SpringLayout.WEST, complaintsListPane);
+		
+		layout.putConstraint(SpringLayout.WEST, refreshComplaintsListButton, 10, SpringLayout.WEST, contentPanel);
+		layout.putConstraint(SpringLayout.SOUTH, refreshComplaintsListButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, refreshComplaintsListButton, -10, SpringLayout.WEST, addComplaintButton);
+		
+		layout.putConstraint(SpringLayout.SOUTH, addComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, addComplaintButton, 0, SpringLayout.EAST, complaintsListPane);
+		
+		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
+		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
+		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.SOUTH, contentPanel);
+		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
+	}
+	
+	
+	
+	/* Getters and Setter */
+	public Controller getController() {
+		return controller;
+	}
+	
 	
 
 	/* Main function. */
 	public static void main(String[] args) {
 		new Client();
+	}
+
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == refreshComplaintsListButton) {
+			updateComplaintsList();
+			return;
+		}
+		
+		if(e.getSource() == addComplaintButton) {
+			new AddComplaintFrame(this);
+			return;
+		}
 	}
 
 }

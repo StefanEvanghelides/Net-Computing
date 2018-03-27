@@ -47,6 +47,7 @@ public class SendMessageFrame extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
 			this.parent.getController().sendMessage();
+			this.dispose();
 		}
 	}
 }

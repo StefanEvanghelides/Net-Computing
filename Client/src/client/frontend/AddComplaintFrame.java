@@ -1,6 +1,7 @@
 package client.frontend;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,13 +21,12 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 	
 	private JButton sendButton;
 	private JTextField type, location, name;
-	private JLabel typeLabel, locationLabel, nameLabel, descriptionLabel;
 	private JTextArea description;
-	private Client parent;
-	private SpringLayout inputsPaneLayout;
-	
+	private JLabel typeLabel, locationLabel, nameLabel, descriptionLabel;
 	private JPanel inputsPane, buttonPane;
 	private JScrollPane scroller;
+	private Client parent;
+	private SpringLayout inputsPaneLayout;
 
 	public AddComplaintFrame(Client parent) {
 		super(parent, "Add Complaint", true);
@@ -59,7 +59,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		buttonPane = new JPanel();
 		this.sendButton = new JButton("Send");
 		this.sendButton.addActionListener(this);
-		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
 		buttonPane.setBorder(BorderFactory.createEmptyBorder(0,10,10,10));
 		buttonPane.add(this.sendButton);
 		
@@ -97,6 +97,8 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.sendButton) {
 			this.parent.getController().sendComplaint();
+			this.parent.updateComplaintsList();
+			this.dispose();
 		}
 	}
 }

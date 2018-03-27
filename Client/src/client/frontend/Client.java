@@ -2,6 +2,8 @@ package client.frontend;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -12,8 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import client.backend.Complaint;
 import client.backend.Controller;
@@ -42,15 +42,16 @@ public class Client extends JFrame implements ActionListener{
 		super("Complaint System");
 		
 		this.layout = new SpringLayout();
-		this.setLayout(this.layout);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(640, 480);
 		this.contentPanel = (JPanel) this.getContentPane();
 		this.controller = new Controller();
 		
-		initialiseComplaintsList();
-		initialiseComplaintInfoPane();
+		this.setLayout(this.layout);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(640, 480);
+		
 		initialiseButtons();
+		initialiseComplaintInfoPane();
+		initialiseComplaintsList();
 		initializeConstraints();
 		
 		this.setVisible(true);
@@ -68,10 +69,19 @@ public class Client extends JFrame implements ActionListener{
 		for(Complaint c : this.complaints) { model.addElement(c); }
 		
 		this.complaintsList.setModel(model);
+		
+		updateComplaintInfoPane();
 	}
 	
 	public void updateComplaintInfoPane() {
-		Complaint c = this.complaintsList.getSelectedValue();
+		Complaint c = null;
+		
+		if(!this.complaintsList.isSelectionEmpty()) {
+			c = this.complaintsList.getSelectedValue();
+		} 
+		
+		this.sendMessageButton.setVisible(!complaintsList.isSelectionEmpty());
+		this.resolveComplaintButton.setVisible(!complaintsList.isSelectionEmpty());
 		this.complaintInfoPane.setText(c != null ? c.getFullDescription() : "");
 	}
 	
@@ -84,13 +94,15 @@ public class Client extends JFrame implements ActionListener{
 		this.complaintsList.setFixedCellWidth(100);
 		this.complaintsListPane = new JScrollPane(complaintsList);
 		
-		this.complaintsList.addListSelectionListener(new ListSelectionListener() {
+		this.complaintsList.addMouseListener(new MouseAdapter() {
+
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				Client.this.sendMessageButton.setVisible(!Client.this.complaintsList.isSelectionEmpty());
-				Client.this.resolveComplaintButton.setVisible(!Client.this.complaintsList.isSelectionEmpty());
-				Client.this.updateComplaintInfoPane();
+			public void mouseClicked(MouseEvent e) {
+		        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+					Client.this.updateComplaintInfoPane();
+		        }
 			}
+			
 		});
 		
 		updateComplaintsList();

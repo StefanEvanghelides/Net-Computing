@@ -7,18 +7,20 @@ public class Complaint {
 	private String sender_ip;
 	private String location;
 	private String name;
+	private String resolved;
 	
-	public Complaint(String id, String type, String description, String sender_ip, String location, String name) {
+	public Complaint(String id, String type, String description, String sender_ip, String location, String name, String resolved) {
 		this.id = id;
 		this.type = type;
 		this.description = description;
 		this.sender_ip = sender_ip;
 		this.location = location;
 		this.name = name;
+		this.resolved = resolved;
 	}
 	
 	public Complaint(String type, String description, String sender_ip, String location, String name) {
-		this(null, type,  description, sender_ip, location, name);
+		this(null, type,  description, sender_ip, location, name, "false");
 	}
 	
 	public String serialize() {

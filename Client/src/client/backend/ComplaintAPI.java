@@ -3,9 +3,16 @@ package client.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
 import client.json.JSONArray;
 import client.json.JSONObject;
 import client.json.parser.JSONParser;
@@ -26,13 +33,24 @@ public class ComplaintAPI {
 		return c;
 	}
 	
-	public void sendComplaint(String urlString, Complaint c) throws IOException {
+	public void sendComplaint(String IPHost, String queue, Complaint c) throws IOException, TimeoutException {
 		String payload = c.serialize();
-		POST(urlString, payload);
+		
+	    ConnectionFactory factory = new ConnectionFactory();
+	    factory.setHost(IPHost);
+	    Connection connection = factory.newConnection();
+	    Channel channel = connection.createChannel();
+	    channel.queueDeclare(queue, false, false, false, null);
+	    channel.basicPublish("", queue, null, payload.getBytes("UTF-8"));
+	    System.out.println(" [x] Sent '" + payload + "'");
+
+	    channel.close();
+	    connection.close();
 	}
 	
-	
-	
+	public void setResolvedComplaint(String urlString) throws IOException {
+		PUT(urlString, "resolved");
+	}
 	
 	
 	/* RESTful API. */
@@ -55,21 +73,28 @@ public class ComplaintAPI {
 		return result.toString();
 	}
     
-    public void POST(String urlString, String payload) throws IOException {
+    public void PUT(String urlString, String payload) throws IOException {
     	URL url = new URL(urlString);
     	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     	conn.setDoOutput(true);
     	conn.setReadTimeout(2000);
         conn.setConnectTimeout(2000);
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod("PUT");
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        outputStreamWriter.write(payload);
+        
+        outputStreamWriter.flush();
+        outputStreamWriter.close();
+        
     }
 
     public Complaint deserializeObject(String jsonString) throws ParseException {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(jsonString);
 			
-		String id = null, type = null, description = null, sender_ip = null, coords = null, name = null;
+		String id = null, type = null, description = null, sender_ip = null, coords = null, name = null, resolved = null;
 		
 		if(obj.containsKey("id")) id = obj.get("id").toString();
 		if(obj.containsKey("type")) type = obj.get("type").toString();
@@ -77,8 +102,9 @@ public class ComplaintAPI {
 		if(obj.containsKey("sender_ip")) sender_ip = obj.get("sender_ip").toString();
 		if(obj.containsKey("coords")) coords = obj.get("coords").toString();
 		if(obj.containsKey("name")) name = obj.get("name").toString();
+		if(obj.containsKey("resolved")) resolved = obj.get("resolved").toString();
 			
-		return new Complaint(id, type, description, sender_ip, coords, name);
+		return new Complaint(id, type, description, sender_ip, coords, name, resolved);
     }
     
 	public ArrayList<Complaint> deserializeArray(String jsonString) throws ParseException {	

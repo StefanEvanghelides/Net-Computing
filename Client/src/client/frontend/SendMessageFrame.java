@@ -18,10 +18,12 @@ public class SendMessageFrame extends JDialog implements ActionListener{
 	public JButton sendButton;
 	public JTextArea messageBody;
 	public Client parent; 
+	public String receive_ip;
 
-	public SendMessageFrame(Client parent) {
+	public SendMessageFrame(Client parent, String receive_ip) {
 		super(parent, "New Message", true);
 		this.parent = parent;
+		this.receive_ip = receive_ip;
 		
 		JPanel messagePane = new JPanel();
 		this.messageBody = new JTextArea(15,30);
@@ -46,7 +48,8 @@ public class SendMessageFrame extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
-			this.parent.getController().sendMessage();
+			this.parent.getController().sendMessage(this.messageBody.getText());
+			this.dispose();
 		}
 	}
 }

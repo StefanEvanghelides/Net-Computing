@@ -3,6 +3,14 @@ package client.frontend;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,13 +28,12 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 	
 	private JButton sendButton;
 	private JTextField type, location, name;
-	private JLabel typeLabel, locationLabel, nameLabel, descriptionLabel;
 	private JTextArea description;
-	private Client parent;
-	private SpringLayout inputsPaneLayout;
-	
+	private JLabel typeLabel, locationLabel, nameLabel, descriptionLabel;
 	private JPanel inputsPane, buttonPane;
 	private JScrollPane scroller;
+	private Client parent;
+	private SpringLayout inputsPaneLayout;
 
 	public AddComplaintFrame(Client parent) {
 		super(parent, "Add Complaint", true);
@@ -59,7 +66,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		buttonPane = new JPanel();
 		this.sendButton = new JButton("Send");
 		this.sendButton.addActionListener(this);
-		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
 		buttonPane.setBorder(BorderFactory.createEmptyBorder(0,10,10,10));
 		buttonPane.add(this.sendButton);
 		
@@ -94,9 +101,20 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.sendButton) {
-			this.parent.getController().sendComplaint();
+	public void actionPerformed(ActionEvent event) {
+		if(event.getSource() == this.sendButton) {
+			try {
+				this.parent.getController().sendComplaint(
+						this.type.getText(),
+						this.description.getText(),
+						"192.168.0.1",
+						this.location.getText(),
+						this.name.getText());
+			} catch (IOException | TimeoutException e) {
+				e.printStackTrace();
+			}
+			this.parent.updateComplaintsList();
+			this.dispose();
 		}
 	}
 }

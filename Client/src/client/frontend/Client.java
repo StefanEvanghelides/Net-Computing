@@ -41,7 +41,8 @@ public class Client extends JFrame implements ActionListener{
 	private JTextPane complaintInfoPane;
 	private JPanel contentPanel;
 	
-	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io";
+	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
+	private String larsAddress = "http://172.20.10.8:5000/complaints";
 	
 	public Client() {
 		super("Complaint System");
@@ -62,11 +63,9 @@ public class Client extends JFrame implements ActionListener{
 		this.setVisible(true);
 	}
 
-
-
 	public void updateComplaintsList() {
 		try {
-			this.complaints = this.controller.receiveComplaintList(this.address + "/mock/all");
+			this.complaints = this.controller.receiveComplaintList(this.larsAddress);
 		} catch (IOException | ParseException e) { e.printStackTrace(); }
 		
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();

@@ -24,7 +24,11 @@ public class Controller {
 		complaintAPI.sendComplaint(IP_ADDRESS, QUEUE_NAME, c);
 	}
 	
-	public void sendComplaint() {}
+	public void sendMessage(String message) {
+		
+		
+		//messageAPI.sendMessage(message, address, port);
+	}
 	
 	public void setResolvedComplaint(String urlString) throws IOException {
 		complaintAPI.setResolvedComplaint(urlString);

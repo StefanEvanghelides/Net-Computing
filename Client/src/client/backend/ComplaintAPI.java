@@ -94,17 +94,26 @@ public class ComplaintAPI {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(jsonString);
 			
-		String id = null, type = null, description = null, sender_ip = null, coords = null, name = null, resolved = null;
+		String id = null, type = null, description = null, sender_ip = null, 
+				location = null, name = null, resolved = null, timestamp = null;
 		
-		if(obj.containsKey("id")) id = obj.get("id").toString();
+		JSONObject senderInfo = new JSONObject();
+		
+		if(obj.containsKey("_id")) id = obj.get("_id").toString();
 		if(obj.containsKey("type")) type = obj.get("type").toString();
 		if(obj.containsKey("description")) description = obj.get("description").toString();
-		if(obj.containsKey("sender_ip")) sender_ip = obj.get("sender_ip").toString();
-		if(obj.containsKey("coords")) coords = obj.get("coords").toString();
-		if(obj.containsKey("name")) name = obj.get("name").toString();
+		//if(obj.containsKey("sender_ip")) sender_ip = obj.get("sender_ip").toString();
+		if(obj.containsKey("location")) location = obj.get("location").toString();
+		//if(obj.containsKey("name")) name = obj.get("name").toString();
 		if(obj.containsKey("resolved")) resolved = obj.get("resolved").toString();
-			
-		return new Complaint(id, type, description, sender_ip, coords, name, resolved);
+		if(obj.containsKey("timestamp")) timestamp = obj.get("timestamp").toString();
+		
+		if(obj.containsKey("sender-info")) senderInfo = (JSONObject) parser.parse(obj.get("sender-info").toString());
+		if(senderInfo.containsKey("name")) name = senderInfo.get("name").toString();	
+		if(senderInfo.containsKey("sender-ip")) sender_ip = senderInfo.get("sender-ip").toString(); 
+		
+	
+		return new Complaint(id, type, description, timestamp, sender_ip, location, name, resolved);
     }
     
 	public ArrayList<Complaint> deserializeArray(String jsonString) throws ParseException {	

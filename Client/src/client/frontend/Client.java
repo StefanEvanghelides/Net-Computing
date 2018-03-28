@@ -13,8 +13,10 @@ import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -61,14 +63,17 @@ public class Client extends JFrame implements ActionListener{
 		initializeConstraints();
 		
 		this.setVisible(true);
+		updateComplaintsList();
 	}
 
 	public void updateComplaintsList() {
-		complaints = new ArrayList<>();
+		complaints = new ArrayList<Complaint>();
 		
 		try {
 			this.complaints = this.controller.receiveComplaintList(this.larsAddress);
-		} catch (IOException | ParseException e) { System.err.println(e.getMessage() + "\n"); }
+		} catch (IOException | ParseException e) { 
+			JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
 		
@@ -101,7 +106,7 @@ public class Client extends JFrame implements ActionListener{
 		this.complaintsListPane = new JScrollPane(complaintsList);
 		
 		this.complaintsList.addMouseListener(new MouseAdapter() {
-
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 		        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
@@ -110,8 +115,6 @@ public class Client extends JFrame implements ActionListener{
 			}
 			
 		});
-		
-		updateComplaintsList();
 		
 		this.contentPanel.add(complaintsListPane);
 	}
@@ -205,7 +208,7 @@ public class Client extends JFrame implements ActionListener{
 			try {
 				this.controller.setResolvedComplaint(this.larsAddress, c);
 			} catch (IOException error) {
-				System.err.println(error.getMessage());
+				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
 			}
 			return;
 		}

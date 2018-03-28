@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -105,13 +106,15 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		if(event.getSource() == this.sendButton) {
 			try {
 				this.parent.getController().sendComplaint(
-						this.type.getText(),
-						this.description.getText(),
-						"192.168.0.1",
-						this.location.getText(),
-						this.name.getText());
+					this.type.getText(),
+					this.description.getText(),
+					"192.168.0.1",
+					this.location.getText(),
+					this.name.getText()
+				);
 			} catch (IOException | TimeoutException e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 			this.parent.updateComplaintsList();
 			this.dispose();

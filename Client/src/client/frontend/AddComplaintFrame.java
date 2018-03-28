@@ -1,9 +1,16 @@
 package client.frontend;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -94,9 +101,18 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.sendButton) {
-			this.parent.getController().sendComplaint();
+	public void actionPerformed(ActionEvent event) {
+		if(event.getSource() == this.sendButton) {
+			try {
+				this.parent.getController().sendComplaint(
+						this.type.getText(),
+						this.description.getText(),
+						"192.168.0.1",
+						this.location.getText(),
+						this.name.getText());
+			} catch (IOException | TimeoutException e) {
+				e.printStackTrace();
+			}
 			this.parent.updateComplaintsList();
 			this.dispose();
 		}

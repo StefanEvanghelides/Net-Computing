@@ -5,7 +5,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -190,7 +195,7 @@ public class Client extends JFrame implements ActionListener{
 		}
 		
 		if(e.getSource() == sendMessageButton) {
-			new SendMessageFrame(this);
+			new SendMessageFrame(this, "192.168.0.1");
 			return;
 		}
 		

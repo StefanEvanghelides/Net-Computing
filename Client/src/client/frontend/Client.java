@@ -64,13 +64,15 @@ public class Client extends JFrame implements ActionListener{
 	}
 
 	public void updateComplaintsList() {
+		complaints = new ArrayList<>();
+		
 		try {
 			this.complaints = this.controller.receiveComplaintList(this.larsAddress);
-		} catch (IOException | ParseException e) { e.printStackTrace(); }
+		} catch (IOException | ParseException e) { System.err.println(e.getMessage() + "\n"); }
 		
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
 		
-		for(Complaint c : this.complaints) { model.addElement(c); }
+		for(Complaint c : this.complaints) model.addElement(c);
 		
 		this.complaintsList.setModel(model);
 		
@@ -199,7 +201,12 @@ public class Client extends JFrame implements ActionListener{
 		}
 		
 		if(e.getSource() == resolveComplaintButton) {
-			this.complaintsList.getSelectedValue();
+			Complaint c = this.complaintsList.getSelectedValue();
+			try {
+				this.controller.setResolvedComplaint(this.larsAddress, c);
+			} catch (IOException error) {
+				System.err.println(error.getMessage());
+			}
 			return;
 		}
 	}

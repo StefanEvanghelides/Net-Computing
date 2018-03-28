@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,9 +14,10 @@ public class MessageAPI {
 	private String message;
 	private ServerSocket serverSocket;
 	
-	private final String MY_IP_ADDRESS = "172.20.10.10";
-	private final String IP_ADDRESS = "172.20.10.10";
-	private final int PORT = 8872;
+	private final String SENDER_ADDRESS = "172.20.10.10";
+	private final String RECEIVER_ADDRESS = "172.20.10.10";
+	private final int SENDER_PORT = 880;
+	private final int RECEIVER_PORT = 8800;
 	
 	public MessageAPI() {
 		//startServer();
@@ -24,7 +26,7 @@ public class MessageAPI {
 	public void sendPacket(Packet p) throws IOException {
         Socket s;
 		try {
-			s = new Socket(IP_ADDRESS, PORT);
+			s = new Socket(RECEIVER_ADDRESS, RECEIVER_PORT);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			return;
@@ -33,10 +35,10 @@ public class MessageAPI {
 			return;
 		}
         
-		ObjectOutputStream outToServer = new ObjectOutputStream(s.getOutputStream());
-        
-		//outToServer.write(p);
-		
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
+        outputStreamWriter.write(p.toString());
+        outputStreamWriter.flush();
+        outputStreamWriter.close();     		
 	}
 	
 	public void parsePacket(Packet p) {
@@ -47,8 +49,8 @@ public class MessageAPI {
 		boolean available = false;
 		
 		try {
-			ServerSocket ss = new ServerSocket(port);
-		    ss.close();
+			Socket s = new Socket("localhost", port);
+		    s.close();
 		    available = true;;
 		} catch (IOException e) {
 			System.out.println("meh, error\n");
@@ -58,19 +60,23 @@ public class MessageAPI {
 	}
 	
 	public void startServer() {
-		Integer port = PORT;
+		Integer port = SENDER_PORT;
 		while(!isAvailablePort(port)) port++;
 		
         try {
         	serverSocket = new ServerSocket(port);
             while (true) {
                 Socket socket = serverSocket.accept();
-                try {
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    out.println("Message received:");
-                } finally {
-                    socket.close();
-                }
+                
+                BufferedReader rd = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        		StringBuilder result = new StringBuilder();
+                String line;
+        		while ((line = rd.readLine()) != null) {
+        			result.append(line);
+        		}
+        		rd.close();
+           
+        		socket.close();
             }
         } catch(Exception e) {
         	e.printStackTrace();
@@ -79,8 +85,12 @@ public class MessageAPI {
 	
 	public void sendMessage(String message) throws IOException {
         Socket s;
+        
+        int port = RECEIVER_PORT;
+		while(!isAvailablePort(port)) port++;
+		
 		try {
-			s = new Socket(IP_ADDRESS, PORT);
+			s = new Socket("localhost", port);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			return;
@@ -89,8 +99,10 @@ public class MessageAPI {
 			return;
 		}
 		
-		ObjectOutputStream outToServer = new ObjectOutputStream(s.getOutputStream());
-        outToServer.write(message.getBytes());
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
+        outputStreamWriter.write(message);
+        outputStreamWriter.flush();
+        outputStreamWriter.close();     
        
 	}
 	

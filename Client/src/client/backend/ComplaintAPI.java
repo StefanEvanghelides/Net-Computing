@@ -49,7 +49,7 @@ public class ComplaintAPI {
 	}
 	
 	public void setResolvedComplaint(String urlString) throws IOException {
-		PUT(urlString, "resolved");
+		PUT(urlString, "true");
 	}
 	
 	
@@ -80,13 +80,15 @@ public class ComplaintAPI {
     	conn.setReadTimeout(2000);
         conn.setConnectTimeout(2000);
         conn.setRequestMethod("PUT");
-        conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        conn.setRequestProperty("Content-Type", "text/plain; charset=UTF-8");
         
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
         outputStreamWriter.write(payload);
-        
         outputStreamWriter.flush();
-        outputStreamWriter.close();
+        outputStreamWriter.close();     
+   
+        Integer responseCode = conn.getResponseCode();        
+        System.out.println(responseCode + "   ");
         
     }
 
@@ -102,9 +104,7 @@ public class ComplaintAPI {
 		if(obj.containsKey("_id")) id = obj.get("_id").toString();
 		if(obj.containsKey("type")) type = obj.get("type").toString();
 		if(obj.containsKey("description")) description = obj.get("description").toString();
-		//if(obj.containsKey("sender_ip")) sender_ip = obj.get("sender_ip").toString();
 		if(obj.containsKey("location")) location = obj.get("location").toString();
-		//if(obj.containsKey("name")) name = obj.get("name").toString();
 		if(obj.containsKey("resolved")) resolved = obj.get("resolved").toString();
 		if(obj.containsKey("timestamp")) timestamp = obj.get("timestamp").toString();
 		

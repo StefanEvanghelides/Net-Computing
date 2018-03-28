@@ -30,8 +30,9 @@ public class Controller {
 		//messageAPI.sendMessage(message, address, port);
 	}
 	
-	public void setResolvedComplaint(String urlString) throws IOException {
-		complaintAPI.setResolvedComplaint(urlString);
+	public void setResolvedComplaint(String urlString, Complaint c) throws IOException {
+		String id = c.getId();
+		complaintAPI.setResolvedComplaint(urlString + "/" + id + "/resolved");
 	}
 	
 	public ArrayList<Complaint> receiveComplaintList(String endpoint) throws IOException, ParseException {

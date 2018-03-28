@@ -1,9 +1,9 @@
+from Core.MongoComplaintsDatabase import MongoComplaintsDatabase
 from flask import request
 from flask_restplus import Resource
 
-from API.Database.MongoComplaintsDatabase import MongoComplaintsDatabase
+from API.endpoints.Complaint import db
 
-db = MongoComplaintsDatabase()
 
 class Complaint(Resource):
     def get(self,complaint_id):

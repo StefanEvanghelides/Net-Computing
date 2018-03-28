@@ -1,10 +1,10 @@
-from RQueue.ComplaintHandler import ComplaintHandler
-from RQueue.MongoComplaintsDatabase import MongoComplaintsDatabase
-from RQueue.RabbitMQDistributor import RabbitMQDistributor
+from MongoComplaintsDatabase import MongoComplaintsDatabase
+from RQueue.DatabaseComplaintHandler import DatabaseComplaintHandler
+from RabbitComplaintsQueue import RabbitComplaintsQueue
 
 db = MongoComplaintsDatabase()
-cd = RabbitMQDistributor()
-h = ComplaintHandler(cd, db)
+cd = RabbitComplaintsQueue("localhost")
+h = DatabaseComplaintHandler(cd, db)
 
 if __name__ == '__main__':
-    cd.start()
+    cd.connect()

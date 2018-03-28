@@ -1,14 +1,15 @@
 import pika
 
+from interfaces.ComplaintsQueue import ComplaintsQueue
 
-class RabbitMQDistributor:
-    def __init__(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+class RabbitComplaintsQueue(ComplaintsQueue):
+    def __init__(self, ip):
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=ip))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='incomming')
 
-    def start(self):
-        print("Starting rabbit mq")
+    def connect(self):
+        print("Starting rabbit mq connection")
         self.channel.start_consuming()
         self.consume(self.call)
 

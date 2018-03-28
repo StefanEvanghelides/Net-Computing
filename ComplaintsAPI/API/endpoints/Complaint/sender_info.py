@@ -1,8 +1,7 @@
 from flask_restplus import Resource
 
-from API.Database.MongoComplaintsDatabase import MongoComplaintsDatabase
+from API.endpoints.Complaint import db
 
-db = MongoComplaintsDatabase()
 
 class SenderInfo(Resource):
     def get(self,complaint_id):

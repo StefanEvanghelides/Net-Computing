@@ -3,9 +3,8 @@ import parser
 from flask import request, abort
 from flask_restplus import Resource
 
-from API.Database.MongoComplaintsDatabase import MongoComplaintsDatabase
+from API.endpoints.Complaint import db
 
-db = MongoComplaintsDatabase()
 
 class Resolved(Resource):
     def get(self,complaint_id):

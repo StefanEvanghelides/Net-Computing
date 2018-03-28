@@ -1,8 +1,10 @@
 from bson import ObjectId
 from pymongo import MongoClient, DESCENDING
 
+from interfaces.ComplaintsDatabase import ComplaintsDatabase
 
-class MongoComplaintsDatabase:
+
+class MongoComplaintsDatabase(ComplaintsDatabase):
     def __init__(self):
         db_client = MongoClient('localhost', 27017)
         self.db = db_client["ComplaintQueue"]

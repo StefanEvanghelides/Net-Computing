@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 
-class ComplaintHandler():
+class DatabaseComplaintHandler():
     def __init__(self, distributor, database):
         self.distributor = distributor
         self.database = database

@@ -4,7 +4,8 @@ from RabbitComplaintsQueue import RabbitComplaintsQueue
 
 db = MongoComplaintsDatabase()
 cd = RabbitComplaintsQueue("localhost")
-h = DatabaseComplaintHandler(cd, db)
+h = DatabaseComplaintHandler(db)
+h.connect_queue(cd)
 
 if __name__ == '__main__':
     cd.connect()

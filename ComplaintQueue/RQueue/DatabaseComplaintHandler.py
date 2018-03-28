@@ -2,13 +2,12 @@ import json
 
 from datetime import datetime
 
+from interfaces.ComplaintsHandler import ComplaintsHandler
 
-class DatabaseComplaintHandler():
-    def __init__(self, distributor, database):
-        self.distributor = distributor
+
+class DatabaseComplaintHandler(ComplaintsHandler):
+    def __init__(self, database):
         self.database = database
-
-        self.distributor.consume(self.handle_complaint)
 
     def handle_complaint(self, ch, method, properties, body):
         print(body)

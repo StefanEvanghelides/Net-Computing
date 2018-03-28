@@ -1,8 +1,10 @@
 from abc import abstractmethod
 
 
-class ComplaintHandler(object):
+class ComplaintsHandler(object):
+    def connect_queue(self, queue):
+        queue.consume(self.handle_complaint)
 
     @abstractmethod
-    def handle_complaint(self, complaint):
+    def handle_complaint(self, ch, method, properties, body):
         pass

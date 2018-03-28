@@ -3,6 +3,7 @@ package client.frontend;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -48,7 +49,11 @@ public class SendMessageFrame extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
-			this.parent.getController().sendMessage(this.messageBody.getText());
+			try {
+				this.parent.getController().sendMessage(this.messageBody.getText());
+			} catch (IOException error) {
+				System.err.println(error.getMessage());
+			}
 			this.dispose();
 		}
 	}

@@ -1,7 +1,11 @@
 package client.backend;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.concurrent.TimeoutException;
 
 import client.json.parser.ParseException;
@@ -43,5 +47,19 @@ public class Controller {
 		return c;
 	}
 	
-	
+	public String getLocalIPAddress() throws SocketException {
+		NetworkInterface ni = NetworkInterface.getByName("wlo1");
+        Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
+
+        String result = "";
+        while(inetAddresses.hasMoreElements()) {
+            InetAddress ia = inetAddresses.nextElement();
+            if(!ia.isLinkLocalAddress()) {
+                result = ia.getHostAddress();
+                break;
+            }
+        }
+        
+        return result;
+	}
 }

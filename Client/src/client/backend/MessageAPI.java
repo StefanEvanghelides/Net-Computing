@@ -24,7 +24,7 @@ public class MessageAPI {
 	}
 	
 	public void startServer() {		
-	    final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
+	    //final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
 		
 		Runnable serverTask = new Runnable() {
 
@@ -43,7 +43,7 @@ public class MessageAPI {
 		        		}
 		        		rd.close();
 						
-						clientProcessingPool.submit(new ClientTask(clientSocket)); 
+						//clientProcessingPool.submit(new ClientTask(clientSocket)); 
 		        		
 		           
 		        		System.out.println("Message = " + result);
@@ -62,42 +62,50 @@ public class MessageAPI {
 	}
 	
 	
-    private class ClientTask implements Runnable {
-        private Socket clientSocket;
-
-        private ClientTask(Socket clientSocket) {
-            this.clientSocket = clientSocket;
-        }
-
-        @Override
-        public void run() {
-            System.out.println("Got a client !");
-            
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class ClientTask implements Runnable {
+//        private Socket clientSocket;
+//
+//        private ClientTask(Socket clientSocket) {
+//            this.clientSocket = clientSocket;
+//        }
+//
+//        @Override
+//        public void run() {
+//            System.out.println("Got a client !");
+//            
+//            try {
+//                clientSocket.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 	
-	public void sendMessage(String message) throws IOException {
-        Socket s;
-		
-		try {
-			s = new Socket("localhost", PORT);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			return;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
-        outputStreamWriter.write(message);
-        outputStreamWriter.flush();
-        outputStreamWriter.close();     
+	public void sendMessage(final String IPAddress, final String message) throws IOException {        
+        Runnable clientTask = new Runnable() {
+
+			@Override
+			public void run() {
+		        Socket s;
+				try {
+					s = new Socket(IPAddress, PORT);
+			        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
+			        outputStreamWriter.write(message);
+			        outputStreamWriter.flush();
+			        outputStreamWriter.close();
+			        s.close();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+					return;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+        	
+        };
+        Thread clientThread = new Thread(clientTask);
+        clientThread.start();
        
 	}
 	

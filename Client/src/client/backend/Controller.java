@@ -53,6 +53,10 @@ public class Controller {
 		return messageAPI.readData(MESSAGES_PATH);
 	}
 	
+	public void clearMessages() throws IOException {
+		messageAPI.clearData();
+	}
+	
 	/* Getting the local IPAddress on UNIX machines. */
 	public String getLocalIPAddress() throws SocketException {
 		NetworkInterface ni = NetworkInterface.getByName("wlo1");

@@ -127,6 +127,12 @@ public class MessageAPI {
 		fileWriter.close();  
 	}
 	
+	public void clearData() throws IOException {
+        FileWriter fileWriter = new FileWriter(PATH);
+        fileWriter.write("");
+		fileWriter.close();  		
+	}
+	
 	/* Getters and setters. */
 	public String getMessage() {
 		return this. message;

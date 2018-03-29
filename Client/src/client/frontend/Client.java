@@ -1,6 +1,5 @@
 package client.frontend;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,7 +22,6 @@ import javax.swing.SpringLayout;
 import client.backend.Complaint;
 import client.backend.Controller;
 import client.json.parser.ParseException;
-import javafx.scene.text.Font;
 
 public class Client extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -50,7 +48,7 @@ public class Client extends JFrame implements ActionListener {
 	private int numComplaintsShown = 10;
 
 	private JPanel contentPanel;
-	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
+	//private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
 
 	private String larsAddress = "http://172.20.10.8:5000/complaints";
 
@@ -198,6 +196,9 @@ public class Client extends JFrame implements ActionListener {
 		layout.putConstraint(SpringLayout.SOUTH, showUnresolvedCheckBox, -10, SpringLayout.NORTH, refreshComplaintsListButton);
 		layout.putConstraint(SpringLayout.EAST, showUnresolvedCheckBox, -10, SpringLayout.WEST, complaintInfoPane);		
 
+		layout.putConstraint(SpringLayout.SOUTH, showNumberOfComplaints, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.WEST, showNumberOfComplaints, 10, SpringLayout.WEST, contentPanel);			
+		
 		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
 		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.NORTH, sendMessageButton);

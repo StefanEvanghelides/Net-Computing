@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;

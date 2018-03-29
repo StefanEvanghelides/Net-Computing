@@ -77,7 +77,9 @@ public class AddComplaintFrame extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == sendButton) {
 			try {
-				parent.getController().sendComplaint(type.getText(), description.getText(), "192.168.0.1",
+				String IPAddress = parent.getController().getLocalIPAddress();
+				parent.getController().sendComplaint(type.getText(), 
+						description.getText(), IPAddress,
 						location.getText(), name.getText());
 			} catch (IOException | TimeoutException e) {
 				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",

@@ -264,13 +264,6 @@ public class Client extends JFrame implements ActionListener {
 		}
 
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
-
-		try {
-			model.addElement(new Complaint("Noise","Here",controller.getLocalIPAddress(),"Something","Matt"));
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		for (Complaint c : complaints) {
 			model.addElement(c);

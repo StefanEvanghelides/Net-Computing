@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -102,6 +103,10 @@ public class Client extends JFrame implements ActionListener {
 			return;
 		}
 		
+		if(e.getSource() == seeMessagesButton) {
+			new MessagesFrame(this);
+		}
+		
 		if(e.getSource() == showUnresolvedCheckBox) {
 			updateComplaintsList();
 			return;
@@ -149,6 +154,7 @@ public class Client extends JFrame implements ActionListener {
 		addComplaintButton.addActionListener(this);
 		resolveComplaintButton.addActionListener(this);
 		sendMessageButton.addActionListener(this);
+		seeMessagesButton.addActionListener(this);;
 		showUnresolvedCheckBox.addActionListener(this);
 		showNumberOfComplaints.addActionListener(this);
 
@@ -259,6 +265,13 @@ public class Client extends JFrame implements ActionListener {
 
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
 
+		try {
+			model.addElement(new Complaint("Noise","Here",controller.getLocalIPAddress(),"Something","Matt"));
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for (Complaint c : complaints) {
 			model.addElement(c);
 		}

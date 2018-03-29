@@ -49,8 +49,8 @@ public class Controller {
 		messageAPI.sendMessage(IPAddress, name, message);
 	}
 	
-	public void readMessage() throws IOException {
-		messageAPI.readData(MESSAGES_PATH);
+	public String readMessage() throws IOException {
+		return messageAPI.readData(MESSAGES_PATH);
 	}
 	
 	/* Getting the local IPAddress on UNIX machines. */

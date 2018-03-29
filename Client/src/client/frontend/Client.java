@@ -85,7 +85,8 @@ public class Client extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == sendMessageButton) {
-			new SendMessageFrame(this, "192.168.0.1");
+			String IPAddress = complaintsList.getSelectedValue().getSenderIp();
+			new SendMessageFrame(this, IPAddress);
 			return;
 		}
 
@@ -101,9 +102,13 @@ public class Client extends JFrame implements ActionListener {
 			return;
 		}
 		
+		if(e.getSource() == showUnresolvedCheckBox) {
+			updateComplaintsList();
+			return;
+		}
+		
 		if(e.getSource() == showNumberOfComplaints) {
 			numComplaintsShown = Integer.parseInt((String)showNumberOfComplaints.getSelectedItem());
-			System.out.println(numComplaintsShown);
 			updateComplaintsList();
 			return;
 		}
@@ -122,7 +127,7 @@ public class Client extends JFrame implements ActionListener {
 		sendMessageButton = new JButton("Send message");
 		sendMessageButton.setVisible(false);
 		
-		showUnresolvedCheckBox = new JCheckBox("Show Unresolved");
+		showUnresolvedCheckBox = new JCheckBox("Only show unresolved");
 		showUnresolvedCheckBox.setFont(new java.awt.Font("Dialog", 1, 10));
 		
 		String[] options = {"5","10","15","20"};

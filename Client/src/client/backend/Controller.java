@@ -28,8 +28,8 @@ public class Controller {
 		complaintAPI.sendComplaint(IP_ADDRESS, EXCHANGE_NAME, c);
 	}
 	
-	public void sendMessage(String IPAddress, String message) throws IOException {	
-		messageAPI.sendMessage(IPAddress, message);
+	public void sendMessage(String IPAddress, String name, String message) throws IOException {	
+		messageAPI.sendMessage(IPAddress, name, message);
 	}
 	
 	public void setResolvedComplaint(String urlString, Complaint c) throws IOException {
@@ -49,9 +49,10 @@ public class Controller {
 	
 	public String getLocalIPAddress() throws SocketException {
 		NetworkInterface ni = NetworkInterface.getByName("wlo1");
-        Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
-
         String result = "";
+        
+        if(ni == null) return result;
+        Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
         while(inetAddresses.hasMoreElements()) {
             InetAddress ia = inetAddresses.nextElement();
             if(!ia.isLinkLocalAddress()) {

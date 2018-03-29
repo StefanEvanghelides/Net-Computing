@@ -11,6 +11,10 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import client.json.JSONObject;
+import client.json.parser.JSONParser;
+import client.json.parser.ParseException;
+
 
 public class MessageAPI {
 	private String message;
@@ -24,8 +28,6 @@ public class MessageAPI {
 	}
 	
 	public void startServer() {		
-	    //final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
-		
 		Runnable serverTask = new Runnable() {
 
 			@Override
@@ -36,17 +38,16 @@ public class MessageAPI {
 						Socket clientSocket = serverSocket.accept();
 
 		                BufferedReader rd = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		        		StringBuilder result = new StringBuilder();
+		        		StringBuilder payload = new StringBuilder();
 		                String line;
 		        		while ((line = rd.readLine()) != null) {
-		        			result.append(line);
+		        			payload.append(line);
 		        		}
-		        		rd.close();
-						
-						//clientProcessingPool.submit(new ClientTask(clientSocket)); 
-		        		
+		        		rd.close();	
 		           
-		        		System.out.println("Message = " + result);
+		        		Packet p = MessageAPI.this.parsePacket(payload.toString());
+		        		
+		        		System.out.println("Packet = " + p);    		
 		        		
 		        		clientSocket.close();
 		            }
@@ -61,36 +62,16 @@ public class MessageAPI {
 
 	}
 	
-	
-//    private class ClientTask implements Runnable {
-//        private Socket clientSocket;
-//
-//        private ClientTask(Socket clientSocket) {
-//            this.clientSocket = clientSocket;
-//        }
-//
-//        @Override
-//        public void run() {
-//            System.out.println("Got a client !");
-//            
-//            try {
-//                clientSocket.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-	
-	public void sendMessage(final String IPAddress, final String message) throws IOException {        
-        Runnable clientTask = new Runnable() {
-
+	public void sendMessage(final String IPAddress, final String name, final String message) throws IOException {        
+        final Packet p = new Packet(name, message);
+		Runnable clientTask = new Runnable() {
 			@Override
 			public void run() {
 		        Socket s;
 				try {
 					s = new Socket(IPAddress, PORT);
 			        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
-			        outputStreamWriter.write(message);
+			        outputStreamWriter.write(p.serialize());
 			        outputStreamWriter.flush();
 			        outputStreamWriter.close();
 			        s.close();
@@ -109,6 +90,18 @@ public class MessageAPI {
        
 	}
 	
+	public Packet parsePacket(String payload) throws ParseException {
+		JSONParser parser = new JSONParser();
+		JSONObject obj = (JSONObject) parser.parse(payload);
+		
+		String name = null, message = null;
+		
+		if(obj.containsKey("name")) name = obj.get("name").toString();
+		if(obj.containsKey("message")) message = obj.get("message").toString();
+		
+		return new Packet(name, message);
+	}
+	
 	/* Getters and setters. */
 	public String getMessage() {
 		return this. message;
@@ -116,5 +109,13 @@ public class MessageAPI {
 	
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public ServerSocket getServerSocket() {
+		return this.serverSocket;
+	}
+	
+	public void setServerSocket(ServerSocket ss) {
+		this.serverSocket = ss;
 	}
 }

@@ -52,7 +52,7 @@ public class SendMessageFrame extends JDialog implements ActionListener{
 			try {
 				this.parent.getController().sendMessage(this.messageBody.getText());
 			} catch (IOException error) {
-				System.err.println(error.getMessage());
+				System.err.println("ERROR: could not send a message!\n" + error.getMessage());
 			}
 			this.dispose();
 		}

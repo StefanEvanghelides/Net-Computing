@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MessageAPI {
@@ -18,53 +20,69 @@ public class MessageAPI {
 	private int PORT = 4001;
 	
 	public MessageAPI() {
-		//startServer();
+		startServer();
 	}
 	
-	private boolean isAvailablePort(int port) {
-		boolean available = false;
+	public void startServer() {		
+	    final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
 		
-		try {
-			Socket s = new Socket("localhost", port);
-		    s.close();
-		    available = true;
-		    System.out.println("Port = " + port);
-		} catch (IOException e) {
-			System.err.print(port + " ");
-		}
-		
-		return available;
+		Runnable serverTask = new Runnable() {
+
+			@Override
+			public void run() {
+		        try {
+		        	serverSocket = new ServerSocket(PORT);
+		            while (true) {		        		
+						Socket clientSocket = serverSocket.accept();
+
+		                BufferedReader rd = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		        		StringBuilder result = new StringBuilder();
+		                String line;
+		        		while ((line = rd.readLine()) != null) {
+		        			result.append(line);
+		        		}
+		        		rd.close();
+						
+						clientProcessingPool.submit(new ClientTask(clientSocket)); 
+		        		
+		           
+		        		System.out.println("Message = " + result);
+		        		
+		        		clientSocket.close();
+		            }
+		        } catch(Exception e) {
+		        	e.printStackTrace();
+		        }
+		        
+			}			
+		};
+        Thread serverThread = new Thread(serverTask);
+        serverThread.start();
+
 	}
 	
-	public void startServer() {
-		//Integer port = PORT;
-		//while(!isAvailablePort(port)) port++;
-		
-        try {
-        	serverSocket = new ServerSocket(PORT);
-            while (true) {
-                Socket socket = serverSocket.accept();
-                
-                BufferedReader rd = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        		StringBuilder result = new StringBuilder();
-                String line;
-        		while ((line = rd.readLine()) != null) {
-        			result.append(line);
-        		}
-        		rd.close();
-           
-        		socket.close();
-            }
-        } catch(Exception e) {
-        	e.printStackTrace();
+	
+    private class ClientTask implements Runnable {
+        private Socket clientSocket;
+
+        private ClientTask(Socket clientSocket) {
+            this.clientSocket = clientSocket;
         }
-	}
+
+        @Override
+        public void run() {
+            System.out.println("Got a client !");
+            
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
 	public void sendMessage(String message) throws IOException {
         Socket s;
-        
-//        int port = PORT;
-//		while(!isAvailablePort(port)) port++;
 		
 		try {
 			s = new Socket("localhost", PORT);

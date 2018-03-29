@@ -33,15 +33,15 @@ public class ComplaintAPI {
 		return c;
 	}
 	
-	public void sendComplaint(String IPHost, String queue, Complaint c) throws IOException, TimeoutException {
+	public void sendComplaint(String IPHost, String exchange, Complaint c) throws IOException, TimeoutException {
 		String payload = c.serialize();
 		
 	    ConnectionFactory factory = new ConnectionFactory();
 	    factory.setHost(IPHost);
 	    Connection connection = factory.newConnection();
 	    Channel channel = connection.createChannel();
-	    channel.queueDeclare(queue, false, false, false, null);
-	    channel.basicPublish("", queue, null, payload.getBytes("UTF-8"));
+        channel.exchangeDeclare(exchange, "fanout");
+        channel.basicPublish(exchange, "", null, payload.getBytes());
 	    System.out.println(" [x] Sent '" + payload + "'");
 
 	    channel.close();

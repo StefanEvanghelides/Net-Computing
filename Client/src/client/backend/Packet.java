@@ -21,6 +21,6 @@ public class Packet {
 	
 	@Override
 	public String toString() {
-		return name + ": " + message;
+		return name + ": " + message + "\n";
 	}
 }

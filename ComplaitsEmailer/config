@@ -7,7 +7,7 @@
     "receivers" :[
         {
             "street" : "Wassenberghstraat",
-            "count" : 10,
+            "count" : 0,
             "email" : "larsholdijk@gmail.com"
         }
     ]

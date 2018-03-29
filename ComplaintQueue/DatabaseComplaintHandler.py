@@ -1,11 +1,14 @@
 import json
 
 from datetime import datetime
-
 from interfaces.ComplaintsHandler import ComplaintsHandler
 
 
 class DatabaseComplaintHandler(ComplaintsHandler):
+    """
+    Implementation of the ComplaintsHandler that stores messages received
+    from the RabbitMQComplaintsQueue as complaints in the database
+    """
     def __init__(self, database):
         self.database = database
 

@@ -6,14 +6,16 @@ from API.endpoints.Complaint import db
 
 class Complaints(Resource):
     def get(self):
-        count = request.args.get('type')
-        if count is None:
+        count_string = request.args.get('count')
+        if count_string is None:
             count = 10
+        else:
+            count = int(count_string)
         type = request.args.get('type')
         resolved = request.args.get("resolved")
         complaints = db.get_all(self.create_querry(type, resolved))
         return_list = list()
-        for comp in complaints[:10]:
+        for comp in complaints[:count]:
             item = {
                 "_id": str(comp['_id']),
                 "type": comp['type'],

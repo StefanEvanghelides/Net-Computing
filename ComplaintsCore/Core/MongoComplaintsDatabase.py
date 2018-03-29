@@ -5,10 +5,13 @@ from interfaces.ComplaintsDatabase import ComplaintsDatabase
 
 
 class MongoComplaintsDatabase(ComplaintsDatabase):
-    def __init__(self):
-        db_client = MongoClient('localhost', 27017)
-        self.db = db_client["ComplaintQueue"]
-        self.collection = self.db["Complaints"]
+    """
+    Implementation of the ComplaintsDatatbase for a MongoDB based complaints database.
+    """
+    def __init__(self, ip, port, db_name, collection_name):
+        db_client = MongoClient(ip, port)
+        self.db = db_client[db_name]
+        self.collection = self.db[collection_name]
 
     def insert(self, complaint):
         self.collection.insert_one(complaint)

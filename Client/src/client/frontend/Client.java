@@ -1,6 +1,5 @@
 package client.frontend;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -42,6 +42,7 @@ public class Client extends JFrame implements ActionListener {
 	private JButton addComplaintButton;
 	private JButton resolveComplaintButton;
 	private JButton sendMessageButton;
+	private JButton seeMessagesButton;
 	private JTextPane complaintInfoPane;
 	private JCheckBox showUnresolvedCheckBox;
 	private JComboBox<String> showNumberOfComplaints;
@@ -49,9 +50,7 @@ public class Client extends JFrame implements ActionListener {
 	private int numComplaintsShown = 10;
 
 	private JPanel contentPanel;
-	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
-
-	private String larsAddress = "http://172.20.10.8:5000/complaints";
+	private String larsAddress = /*"http://172.20.10.8:5000/complaints";*/"https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
 
 	public Client() {
 		super("Complaint System");
@@ -103,9 +102,13 @@ public class Client extends JFrame implements ActionListener {
 			return;
 		}
 		
+		if(e.getSource() == showUnresolvedCheckBox) {
+			updateComplaintsList();
+			return;
+		}
+		
 		if(e.getSource() == showNumberOfComplaints) {
 			numComplaintsShown = Integer.parseInt((String)showNumberOfComplaints.getSelectedItem());
-			System.out.println(numComplaintsShown);
 			updateComplaintsList();
 			return;
 		}
@@ -118,14 +121,25 @@ public class Client extends JFrame implements ActionListener {
 
 	private void initialiseButtons() {
 		refreshComplaintsListButton = new JButton("Refresh");
+		refreshComplaintsListButton.setFocusPainted(false);
+		
 		addComplaintButton = new JButton("Add");
+		addComplaintButton.setFocusPainted(false);
+		
 		resolveComplaintButton = new JButton("Resolve");
 		resolveComplaintButton.setVisible(false);
+		resolveComplaintButton.setFocusPainted(false);
+		
 		sendMessageButton = new JButton("Send message");
 		sendMessageButton.setVisible(false);
+		sendMessageButton.setFocusPainted(false);
 		
-		showUnresolvedCheckBox = new JCheckBox("Show Unresolved");
+		seeMessagesButton = new JButton(new ImageIcon("images/mail.png"));
+		seeMessagesButton.setFocusPainted(false);
+		
+		showUnresolvedCheckBox = new JCheckBox("Only show unresolved");
 		showUnresolvedCheckBox.setFont(new java.awt.Font("Dialog", 1, 10));
+		showUnresolvedCheckBox.setFocusPainted(false);
 		
 		String[] options = {"5","10","15","20"};
 		showNumberOfComplaints = new JComboBox<String>(options);
@@ -144,6 +158,7 @@ public class Client extends JFrame implements ActionListener {
 		contentPanel.add(sendMessageButton);
 		contentPanel.add(showUnresolvedCheckBox);
 		contentPanel.add(showNumberOfComplaints);
+		contentPanel.add(seeMessagesButton);
 	}
 
 	private void initialiseComplaintInfoPane() {
@@ -192,12 +207,18 @@ public class Client extends JFrame implements ActionListener {
 		layout.putConstraint(SpringLayout.SOUTH, sendMessageButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, sendMessageButton, 0, SpringLayout.EAST, complaintInfoPane);
 
+		layout.putConstraint(SpringLayout.NORTH, seeMessagesButton, 10, SpringLayout.SOUTH, complaintInfoPane);
+		layout.putConstraint(SpringLayout.WEST, seeMessagesButton, 0, SpringLayout.WEST, complaintInfoPane);		
+		
 		layout.putConstraint(SpringLayout.SOUTH, resolveComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, resolveComplaintButton, -10, SpringLayout.WEST, sendMessageButton);
 		
 		layout.putConstraint(SpringLayout.SOUTH, showUnresolvedCheckBox, -10, SpringLayout.NORTH, refreshComplaintsListButton);
 		layout.putConstraint(SpringLayout.EAST, showUnresolvedCheckBox, -10, SpringLayout.WEST, complaintInfoPane);		
 
+		layout.putConstraint(SpringLayout.SOUTH, showNumberOfComplaints, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.WEST, showNumberOfComplaints, 10, SpringLayout.WEST, contentPanel);			
+		
 		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
 		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.NORTH, sendMessageButton);
@@ -227,8 +248,8 @@ public class Client extends JFrame implements ActionListener {
 		complaints = new ArrayList<Complaint>();
 		
 		String complaintsNum = "?count=" + numComplaintsShown;
-		String showUnresolved = (showUnresolvedCheckBox.isSelected() ? "&resolved=false" : "");
-
+		String showUnresolved = (showUnresolvedCheckBox.isSelected() ? "&resolved=false" : "");		
+		
 		try {
 			complaints = controller.receiveComplaintList(larsAddress + complaintsNum + showUnresolved);
 		} catch (IOException | ParseException e) {

@@ -50,8 +50,8 @@ public class Client extends JFrame implements ActionListener {
 	private int numComplaintsShown = 10;
 
 	private JPanel contentPanel;
-	private String larsAddress = /*"http://172.20.10.8:5000/complaints";*/"https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
-
+	private String larsAddress = "http://172.20.10.8:5000/complaints";
+	
 	public Client() {
 		super("Complaint System");
 

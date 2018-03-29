@@ -49,9 +49,10 @@ public class Controller {
 	
 	public String getLocalIPAddress() throws SocketException {
 		NetworkInterface ni = NetworkInterface.getByName("wlo1");
-        Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
-
         String result = "";
+        
+        if(ni == null) return result;
+        Enumeration<InetAddress> inetAddresses =  ni.getInetAddresses();
         while(inetAddresses.hasMoreElements()) {
             InetAddress ia = inetAddresses.nextElement();
             if(!ia.isLinkLocalAddress()) {

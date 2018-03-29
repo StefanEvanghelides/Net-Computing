@@ -1,19 +1,17 @@
 package client.frontend;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -25,14 +23,19 @@ import javax.swing.SpringLayout;
 import client.backend.Complaint;
 import client.backend.Controller;
 import client.json.parser.ParseException;
+import javafx.scene.text.Font;
 
-public class Client extends JFrame implements ActionListener{
+public class Client extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	
+
+	/* Main function. */
+	public static void main(String[] args) {
+		new Client();
+	}
+
 	private Controller controller;
-	
+
 	private ArrayList<Complaint> complaints;
-	
 	private SpringLayout layout;
 	private JList<Complaint> complaintsList;
 	private JScrollPane complaintsListPane;
@@ -41,177 +44,207 @@ public class Client extends JFrame implements ActionListener{
 	private JButton resolveComplaintButton;
 	private JButton sendMessageButton;
 	private JTextPane complaintInfoPane;
+	private JCheckBox showUnresolvedCheckBox;
+	private JComboBox<String> showNumberOfComplaints;
+	
+	private int numComplaintsShown = 10;
+
 	private JPanel contentPanel;
-	
 	private String address = "https://0feeab81-419c-4af6-b890-b67085a56e68.mock.pstmn.io/mock/all";
+
 	private String larsAddress = "http://172.20.10.8:5000/complaints";
-	
+
 	public Client() {
 		super("Complaint System");
-		
-		this.layout = new SpringLayout();
-		this.contentPanel = (JPanel) this.getContentPane();
-		this.controller = new Controller();
-		
-		this.setLayout(this.layout);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		layout = new SpringLayout();
+		contentPanel = (JPanel) getContentPane();
+		controller = new Controller();
+
+		setLayout(layout);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(640, 480);
-		
+
 		initialiseButtons();
 		initialiseComplaintInfoPane();
 		initialiseComplaintsList();
 		initializeConstraints();
-		
-		this.setVisible(true);
+
+		setVisible(true);
 		updateComplaintsList();
 	}
 
-	public void updateComplaintsList() {
-		complaints = new ArrayList<Complaint>();
-		
-		try {
-			this.complaints = this.controller.receiveComplaintList(this.larsAddress);
-		} catch (IOException | ParseException e) { 
-			JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == refreshComplaintsListButton) {
+			updateComplaintsList();
+			return;
+		}
+
+		if (e.getSource() == addComplaintButton) {
+			new AddComplaintFrame(this);
+			return;
+		}
+
+		if (e.getSource() == sendMessageButton) {
+			new SendMessageFrame(this, "192.168.0.1");
+			return;
+		}
+
+		if (e.getSource() == resolveComplaintButton) {
+			Complaint c = complaintsList.getSelectedValue();
+			try {
+				controller.setResolvedComplaint(larsAddress, c);
+			} catch (IOException error) {
+				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			updateComplaintsList();
+			return;
 		}
 		
-		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
-		
-		for(Complaint c : this.complaints) model.addElement(c);
-		
-		this.complaintsList.setModel(model);
-		
-		updateComplaintInfoPane();
+		if(e.getSource() == showNumberOfComplaints) {
+			numComplaintsShown = Integer.parseInt((String)showNumberOfComplaints.getSelectedItem());
+			System.out.println(numComplaintsShown);
+			updateComplaintsList();
+			return;
+		}
 	}
-	
-	public void updateComplaintInfoPane() {
-		Complaint c = null;
-		
-		if(!this.complaintsList.isSelectionEmpty()) {
-			c = this.complaintsList.getSelectedValue();
-		} 
-		
-		this.sendMessageButton.setVisible(!complaintsList.isSelectionEmpty());
-		this.resolveComplaintButton.setVisible(!complaintsList.isSelectionEmpty());
-		this.complaintInfoPane.setText(c != null ? c.getFullDescription() : "");
+
+	/* Getters and Setter */
+	public Controller getController() {
+		return controller;
 	}
-	
-	
-	
-	/* Private helpers */
-	private void initialiseComplaintsList() {
-		this.complaintsList = new JList<Complaint>();
-		this.complaintsList.setFixedCellHeight(40);
-		this.complaintsList.setFixedCellWidth(100);
-		this.complaintsListPane = new JScrollPane(complaintsList);
-		
-		this.complaintsList.addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-		        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-					Client.this.updateComplaintInfoPane();
-		        }
-			}
-			
-		});
-		
-		this.contentPanel.add(complaintsListPane);
-	}
-	
+
 	private void initialiseButtons() {
-		this.refreshComplaintsListButton = new JButton("Refresh");
-		this.addComplaintButton = new JButton("Add");
-		this.resolveComplaintButton = new JButton("Resolve");
-		this.resolveComplaintButton.setVisible(false);
-		this.sendMessageButton = new JButton("Send message");
-		this.sendMessageButton.setVisible(false);
-	
-		this.refreshComplaintsListButton.addActionListener(this);
-		this.addComplaintButton.addActionListener(this);
-		this.resolveComplaintButton.addActionListener(this);
-		this.sendMessageButton.addActionListener(this);
-	
-		this.contentPanel.add(refreshComplaintsListButton);
-		this.contentPanel.add(addComplaintButton);
-		this.contentPanel.add(resolveComplaintButton);
-		this.contentPanel.add(sendMessageButton);
+		refreshComplaintsListButton = new JButton("Refresh");
+		addComplaintButton = new JButton("Add");
+		resolveComplaintButton = new JButton("Resolve");
+		resolveComplaintButton.setVisible(false);
+		sendMessageButton = new JButton("Send message");
+		sendMessageButton.setVisible(false);
+		
+		showUnresolvedCheckBox = new JCheckBox("Show Unresolved");
+		showUnresolvedCheckBox.setFont(new java.awt.Font("Dialog", 1, 10));
+		
+		String[] options = {"5","10","15","20"};
+		showNumberOfComplaints = new JComboBox<String>(options);
+		showNumberOfComplaints.setSelectedIndex(1);
+
+		refreshComplaintsListButton.addActionListener(this);
+		addComplaintButton.addActionListener(this);
+		resolveComplaintButton.addActionListener(this);
+		sendMessageButton.addActionListener(this);
+		showUnresolvedCheckBox.addActionListener(this);
+		showNumberOfComplaints.addActionListener(this);
+
+		contentPanel.add(refreshComplaintsListButton);
+		contentPanel.add(addComplaintButton);
+		contentPanel.add(resolveComplaintButton);
+		contentPanel.add(sendMessageButton);
+		contentPanel.add(showUnresolvedCheckBox);
+		contentPanel.add(showNumberOfComplaints);
 	}
 
 	private void initialiseComplaintInfoPane() {
-		this.complaintInfoPane = new JTextPane();
-		this.complaintInfoPane.setEditable(false);
-		this.complaintInfoPane.setContentType("text/html");
-		this.contentPanel.add(this.complaintInfoPane);
+		complaintInfoPane = new JTextPane();
+		complaintInfoPane.setEditable(false);
+		complaintInfoPane.setContentType("text/html");
+		contentPanel.add(complaintInfoPane);
 	}
-	
-	private void initializeConstraints() {		
+
+	/* Private helpers */
+	private void initialiseComplaintsList() {
+		complaintsList = new JList<Complaint>();
+		complaintsList.setFixedCellHeight(40);
+		complaintsList.setFixedCellWidth(100);
+		complaintsListPane = new JScrollPane(complaintsList);
+
+		complaintsList.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+					Client.this.updateComplaintInfoPane();
+				}
+			}
+
+		});
+
+		contentPanel.add(complaintsListPane);
+	}
+
+	private void initializeConstraints() {
 		layout.putConstraint(SpringLayout.NORTH, complaintsListPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintsListPane, 10, SpringLayout.WEST, contentPanel);
-		layout.putConstraint(SpringLayout.SOUTH, complaintsListPane, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.SOUTH, complaintsListPane, -10, SpringLayout.NORTH,
+				showUnresolvedCheckBox);
 		layout.putConstraint(SpringLayout.EAST, complaintsListPane, 200, SpringLayout.WEST, complaintsListPane);
-		
+
 		layout.putConstraint(SpringLayout.WEST, refreshComplaintsListButton, 10, SpringLayout.WEST, contentPanel);
 		layout.putConstraint(SpringLayout.SOUTH, refreshComplaintsListButton, -10, SpringLayout.SOUTH, contentPanel);
-		layout.putConstraint(SpringLayout.EAST, refreshComplaintsListButton, -10, SpringLayout.WEST, addComplaintButton);
-		
+		layout.putConstraint(SpringLayout.EAST, refreshComplaintsListButton, -10, SpringLayout.WEST,
+				addComplaintButton);
+
 		layout.putConstraint(SpringLayout.SOUTH, addComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, addComplaintButton, 0, SpringLayout.EAST, complaintsListPane);
-		
+
 		layout.putConstraint(SpringLayout.SOUTH, sendMessageButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, sendMessageButton, 0, SpringLayout.EAST, complaintInfoPane);
-		
+
 		layout.putConstraint(SpringLayout.SOUTH, resolveComplaintButton, -10, SpringLayout.SOUTH, contentPanel);
 		layout.putConstraint(SpringLayout.EAST, resolveComplaintButton, -10, SpringLayout.WEST, sendMessageButton);
 		
+		layout.putConstraint(SpringLayout.SOUTH, showUnresolvedCheckBox, -10, SpringLayout.NORTH, refreshComplaintsListButton);
+		layout.putConstraint(SpringLayout.EAST, showUnresolvedCheckBox, -10, SpringLayout.WEST, complaintInfoPane);		
+
 		layout.putConstraint(SpringLayout.NORTH, complaintInfoPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintInfoPane, 10, SpringLayout.EAST, complaintsListPane);
 		layout.putConstraint(SpringLayout.SOUTH, complaintInfoPane, -10, SpringLayout.NORTH, sendMessageButton);
 		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
-	
-	
-	
-	/* Getters and Setter */
-	public Controller getController() {
-		return controller;
+
+	public void updateComplaintInfoPane() {
+		Complaint c = null;
+
+		if (!complaintsList.isSelectionEmpty()) {
+			c = complaintsList.getSelectedValue();
+		}
+
+		sendMessageButton.setVisible(!complaintsList.isSelectionEmpty());
+		resolveComplaintButton.setVisible(!complaintsList.isSelectionEmpty());
+		
+		complaintInfoPane.setText(c == null ? "" : 
+			"<span style='font-size: 18px;font-weight: 700;'>" + c.getType() + "</span><br/>" + 
+			"<span style='font-size: 14px;font-weight: 400;'>" + c.getLocation() + "</span><br/><br/>" + 
+			"<span style='font-size: 12px;'>" + c.getDescription() + "</span><br/><br/>" + 
+			"<span style='font-size: 12px;'>Posted by " + c.getName() + "</span><br/><br/>" +
+			(c.getResolved().equals("true") ? "<span style='font-size: 12px;'>Complaint has been resolved</span>" : "")
+		);
 	}
-	
-	
 
-	/* Main function. */
-	public static void main(String[] args) {
-		new Client();
-	}
-
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == refreshComplaintsListButton) {
-			updateComplaintsList();
-			return;
-		}
+	public void updateComplaintsList() {
+		complaints = new ArrayList<Complaint>();
 		
-		if(e.getSource() == addComplaintButton) {
-			new AddComplaintFrame(this);
-			return;
+		String complaintsNum = "?count=" + numComplaintsShown;
+		String showUnresolved = (showUnresolvedCheckBox.isSelected() ? "&resolved=false" : "");
+
+		try {
+			complaints = controller.receiveComplaintList(larsAddress + complaintsNum + showUnresolved);
+		} catch (IOException | ParseException e) {
+			JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
-		
-		if(e.getSource() == sendMessageButton) {
-			new SendMessageFrame(this, "192.168.0.1");
-			return;
+
+		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
+
+		for (Complaint c : complaints) {
+			model.addElement(c);
 		}
-		
-		if(e.getSource() == resolveComplaintButton) {
-			Complaint c = this.complaintsList.getSelectedValue();
-			try {
-				this.controller.setResolvedComplaint(this.larsAddress, c);
-			} catch (IOException error) {
-				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
-			}
-			return;
-		}
+
+		complaintsList.setModel(model);
+
+		updateComplaintInfoPane();
 	}
 
 }

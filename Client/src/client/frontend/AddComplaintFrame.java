@@ -4,12 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.concurrent.TimeoutException;
 
 import javax.swing.BorderFactory;
@@ -24,9 +18,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-public class AddComplaintFrame extends JDialog implements ActionListener{
+public class AddComplaintFrame extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	private JButton sendButton;
 	private JTextField type, location, name;
 	private JTextArea description;
@@ -40,21 +34,21 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		super(parent, "Add Complaint", true);
 		this.parent = parent;
 		this.setSize(350, 330);
-		
+
 		inputsPane = new JPanel();
 		inputsPaneLayout = new SpringLayout();
 		inputsPane.setLayout(inputsPaneLayout);
-		this.type = new JTextField(20);
-		this.typeLabel = new JLabel("Type");		
-		this.location = new JTextField(20);
-		this.locationLabel = new JLabel("Location");
-		this.name = new JTextField(20);
-		this.nameLabel = new JLabel("Name");		
-		this.description = new JTextArea(10,20);
-		this.descriptionLabel = new JLabel("Description");
-		this.description.setLineWrap(true);
-		scroller = new JScrollPane(this.description);
-		inputsPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		type = new JTextField(20);
+		typeLabel = new JLabel("Type");
+		location = new JTextField(20);
+		locationLabel = new JLabel("Location");
+		name = new JTextField(20);
+		nameLabel = new JLabel("Name");
+		description = new JTextArea(10, 20);
+		descriptionLabel = new JLabel("Description");
+		description.setLineWrap(true);
+		scroller = new JScrollPane(description);
+		inputsPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		inputsPane.add(typeLabel);
 		inputsPane.add(type);
 		inputsPane.add(locationLabel);
@@ -63,20 +57,36 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		inputsPane.add(name);
 		inputsPane.add(descriptionLabel);
 		inputsPane.add(scroller);
-		
+
 		buttonPane = new JPanel();
-		this.sendButton = new JButton("Send");
-		this.sendButton.addActionListener(this);
+		sendButton = new JButton("Send");
+		sendButton.addActionListener(this);
 		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
-		buttonPane.setBorder(BorderFactory.createEmptyBorder(0,10,10,10));
-		buttonPane.add(this.sendButton);
-		
+		buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		buttonPane.add(sendButton);
+
 		initialiseConstraints();
-		
-		this.getContentPane().add(inputsPane, BorderLayout.CENTER);
-		this.getContentPane().add(buttonPane, BorderLayout.SOUTH);
-		
-		this.setVisible(true);	
+
+		getContentPane().add(inputsPane, BorderLayout.CENTER);
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+		setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == sendButton) {
+			try {
+				parent.getController().sendComplaint(type.getText(), description.getText(), "192.168.0.1",
+						location.getText(), name.getText());
+			} catch (IOException | TimeoutException e) {
+				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			parent.updateComplaintsList();
+			dispose();
+		}
 	}
 
 	private void initialiseConstraints() {
@@ -88,7 +98,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, nameLabel, 0, SpringLayout.WEST, locationLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.NORTH, descriptionLabel, 10, SpringLayout.SOUTH, nameLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, descriptionLabel, 0, SpringLayout.WEST, nameLabel);
-		
+
 		inputsPaneLayout.putConstraint(SpringLayout.NORTH, type, 0, SpringLayout.NORTH, typeLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, type, 10, SpringLayout.EAST, descriptionLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.NORTH, location, 0, SpringLayout.NORTH, locationLabel);
@@ -97,27 +107,6 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, name, 10, SpringLayout.EAST, descriptionLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.NORTH, scroller, 0, SpringLayout.NORTH, descriptionLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, scroller, 10, SpringLayout.EAST, descriptionLabel);
-		
-		
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == this.sendButton) {
-			try {
-				this.parent.getController().sendComplaint(
-					this.type.getText(),
-					this.description.getText(),
-					"192.168.0.1",
-					this.location.getText(),
-					this.name.getText()
-				);
-			} catch (IOException | TimeoutException e) {
-				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			this.parent.updateComplaintsList();
-			this.dispose();
-		}
 	}
 }

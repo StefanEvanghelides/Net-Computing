@@ -111,7 +111,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener{
 						this.location.getText(),
 						this.name.getText());
 			} catch (IOException | TimeoutException e) {
-				e.printStackTrace();
+				System.err.println("ERROR: could not add an object!\n" + e.getMessage());
 			}
 			this.parent.updateComplaintsList();
 			this.dispose();

@@ -68,7 +68,7 @@ public class Client extends JFrame implements ActionListener{
 		
 		try {
 			this.complaints = this.controller.receiveComplaintList(this.larsAddress);
-		} catch (IOException | ParseException e) { System.err.println(e.getMessage() + "\n"); }
+		} catch (IOException | ParseException e) { System.err.println("ERROR: could not retrieve the list of complaints!\n" + e.getMessage() + "\n"); }
 		
 		DefaultListModel<Complaint> model = new DefaultListModel<Complaint>();
 		
@@ -205,7 +205,7 @@ public class Client extends JFrame implements ActionListener{
 			try {
 				this.controller.setResolvedComplaint(this.larsAddress, c);
 			} catch (IOException error) {
-				System.err.println(error.getMessage());
+				System.err.println("ERROR: could not resolve complaint!\n" + error.getMessage());
 			}
 			return;
 		}

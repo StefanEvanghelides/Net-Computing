@@ -17,7 +17,7 @@ public class MessageAPI {
 	private ServerSocket serverSocket;
 	
 	private final String IP_ADDRESS = "172.20.10.10";
-	private int PORT = 4001;
+	private int PORT = 4002;
 	
 	public MessageAPI() {
 		startServer();

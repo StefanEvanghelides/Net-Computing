@@ -23,7 +23,6 @@ import javax.swing.SpringLayout;
 import client.backend.Complaint;
 import client.backend.Controller;
 import client.json.parser.ParseException;
-import javafx.scene.text.Font;
 
 public class Client extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;

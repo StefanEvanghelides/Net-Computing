@@ -107,6 +107,5 @@ public class AddComplaintFrame extends JDialog implements ActionListener {
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, name, 10, SpringLayout.EAST, descriptionLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.NORTH, scroller, 0, SpringLayout.NORTH, descriptionLabel);
 		inputsPaneLayout.putConstraint(SpringLayout.WEST, scroller, 10, SpringLayout.EAST, descriptionLabel);
-
 	}
 }

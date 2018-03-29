@@ -3,6 +3,7 @@ package client.frontend;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -47,9 +48,14 @@ public class SendMessageFrame extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == sendButton) {
-			parent.getController().sendMessage(messageBody.getText());
-			dispose();
+		if(e.getSource() == sendButton) {
+			try {
+				this.parent.getController().sendMessage(this.messageBody.getText());
+			} catch (IOException error) {
+				JOptionPane.showMessageDialog(this, "User is offline", "Connection Error",
+					JOptionPane.ERROR_MESSAGE);
+			}
+			this.dispose();
 		}
 	}
 }

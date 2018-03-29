@@ -8,89 +8,84 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MessageAPI {
 	private String message;
 	private ServerSocket serverSocket;
 	
-	private final String SENDER_ADDRESS = "172.20.10.10";
-	private final String RECEIVER_ADDRESS = "172.20.10.10";
-	private final int SENDER_PORT = 880;
-	private final int RECEIVER_PORT = 8800;
+	private final String IP_ADDRESS = "172.20.10.10";
+	private int PORT = 4001;
 	
 	public MessageAPI() {
-		//startServer();
+		startServer();
 	}
 	
-	public void sendPacket(Packet p) throws IOException {
-        Socket s;
-		try {
-			s = new Socket(RECEIVER_ADDRESS, RECEIVER_PORT);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			return;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-        
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(s.getOutputStream());
-        outputStreamWriter.write(p.toString());
-        outputStreamWriter.flush();
-        outputStreamWriter.close();     		
-	}
-	
-	public void parsePacket(Packet p) {
+	public void startServer() {		
+	    final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
 		
-	}
+		Runnable serverTask = new Runnable() {
 
-	private boolean isAvailablePort(int port) {
-		boolean available = false;
-		
-		try {
-			Socket s = new Socket("localhost", port);
-		    s.close();
-		    available = true;;
-		} catch (IOException e) {
-			System.out.println("meh, error\n");
-		}
-		
-		return available;
+			@Override
+			public void run() {
+		        try {
+		        	serverSocket = new ServerSocket(PORT);
+		            while (true) {		        		
+						Socket clientSocket = serverSocket.accept();
+
+		                BufferedReader rd = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		        		StringBuilder result = new StringBuilder();
+		                String line;
+		        		while ((line = rd.readLine()) != null) {
+		        			result.append(line);
+		        		}
+		        		rd.close();
+						
+						clientProcessingPool.submit(new ClientTask(clientSocket)); 
+		        		
+		           
+		        		System.out.println("Message = " + result);
+		        		
+		        		clientSocket.close();
+		            }
+		        } catch(Exception e) {
+		        	e.printStackTrace();
+		        }
+		        
+			}			
+		};
+        Thread serverThread = new Thread(serverTask);
+        serverThread.start();
+
 	}
 	
-	public void startServer() {
-		Integer port = SENDER_PORT;
-		while(!isAvailablePort(port)) port++;
-		
-        try {
-        	serverSocket = new ServerSocket(port);
-            while (true) {
-                Socket socket = serverSocket.accept();
-                
-                BufferedReader rd = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        		StringBuilder result = new StringBuilder();
-                String line;
-        		while ((line = rd.readLine()) != null) {
-        			result.append(line);
-        		}
-        		rd.close();
-           
-        		socket.close();
-            }
-        } catch(Exception e) {
-        	e.printStackTrace();
+	
+    private class ClientTask implements Runnable {
+        private Socket clientSocket;
+
+        private ClientTask(Socket clientSocket) {
+            this.clientSocket = clientSocket;
         }
-	}
+
+        @Override
+        public void run() {
+            System.out.println("Got a client !");
+            
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
 	public void sendMessage(String message) throws IOException {
         Socket s;
-        
-        int port = RECEIVER_PORT;
-		while(!isAvailablePort(port)) port++;
 		
 		try {
-			s = new Socket("localhost", port);
+			s = new Socket("localhost", PORT);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			return;

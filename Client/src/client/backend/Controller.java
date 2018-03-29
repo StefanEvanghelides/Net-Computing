@@ -11,7 +11,7 @@ public class Controller {
 	private MessageAPI messageAPI;
 	private ComplaintAPI complaintAPI;
 	
-	private final String QUEUE_NAME = "incomming";
+	private final String EXCHANGE_NAME = "Complaints";
 	private final String IP_ADDRESS = "172.20.10.8";
 	
 	public Controller() {
@@ -21,13 +21,11 @@ public class Controller {
 	
 	public void sendComplaint(String type, String description, String sender_ip, String coords, String name) throws IOException, TimeoutException {
 		Complaint c = new Complaint(type, description, sender_ip, coords, name);
-		complaintAPI.sendComplaint(IP_ADDRESS, QUEUE_NAME, c);
+		complaintAPI.sendComplaint(IP_ADDRESS, EXCHANGE_NAME, c);
 	}
 	
-	public void sendMessage(String message) {
-		
-		
-		//messageAPI.sendMessage(message, address, port);
+	public void sendMessage(String message) throws IOException {	
+		messageAPI.sendMessage(message);
 	}
 	
 	public void setResolvedComplaint(String urlString, Complaint c) throws IOException {

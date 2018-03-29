@@ -28,8 +28,8 @@ public class Controller {
 		complaintAPI.sendComplaint(IP_ADDRESS, EXCHANGE_NAME, c);
 	}
 	
-	public void sendMessage(String message) throws IOException {	
-		messageAPI.sendMessage(message);
+	public void sendMessage(String IPAddress, String message) throws IOException {	
+		messageAPI.sendMessage(IPAddress, message);
 	}
 	
 	public void setResolvedComplaint(String urlString, Complaint c) throws IOException {

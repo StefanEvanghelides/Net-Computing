@@ -77,7 +77,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == sendButton) {
 			try {
-				String IPAddress = parent.getController().getLocalIPAddress();
+				String IPAddress = parent.getController().getLocalIPAddress();				
 				parent.getController().sendComplaint(type.getText(), 
 						description.getText(), IPAddress,
 						location.getText(), name.getText());

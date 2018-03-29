@@ -26,7 +26,7 @@ public class SendMessageFrame extends JDialog implements ActionListener {
 		super(parent, "New Message", true);
 		this.parent = parent;
 		this.receive_ip = receive_ip;
-
+	
 		JPanel messagePane = new JPanel();
 		messageBody = new JTextArea(15, 30);
 		messageBody.setLineWrap(true);
@@ -51,7 +51,7 @@ public class SendMessageFrame extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == sendButton) {
 			try {
-				this.parent.getController().sendMessage(this.messageBody.getText());
+				this.parent.getController().sendMessage(this.receive_ip, this.messageBody.getText());
 			} catch (IOException error) {
 				JOptionPane.showMessageDialog(this, "User is offline", "Connection Error",
 					JOptionPane.ERROR_MESSAGE);

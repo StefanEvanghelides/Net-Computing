@@ -86,7 +86,8 @@ public class Client extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == sendMessageButton) {
-			new SendMessageFrame(this, "192.168.0.1");
+			String IPAddress = complaintsList.getSelectedValue().getSenderIp();
+			new SendMessageFrame(this, IPAddress);
 			return;
 		}
 

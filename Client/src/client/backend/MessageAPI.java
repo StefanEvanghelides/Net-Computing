@@ -23,7 +23,7 @@ public class MessageAPI {
 	private ServerSocket serverSocket;
 	
 	private final int PORT = 4002;
-	private final String PATH = "cache/messages";
+	private final String PATH = "cache/messages.txt";
 	
 	public MessageAPI() {
 		startServer();

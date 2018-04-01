@@ -51,9 +51,13 @@ public class MessageAPI {
 		        		clientSocket.close();
 		            }
 		        } catch(Exception e) {
-		        	e.printStackTrace();
+		        	System.err.println(e.getMessage());
 		        } finally {
-		        	
+		        	try {
+						serverSocket.close();
+					} catch (IOException e) {
+						System.err.println(e.getMessage());
+					}
 		        }
 		        
 			}			

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
@@ -38,10 +40,11 @@ public class ComplaintAPI {
 		
 	    ConnectionFactory factory = new ConnectionFactory();
 	    factory.setHost(IPHost);
+	    factory.setConnectionTimeout(2000);
 	    Connection connection = factory.newConnection();
 	    Channel channel = connection.createChannel();
-        channel.exchangeDeclare(exchange, "fanout");
-        channel.basicPublish(exchange, "", null, payload.getBytes());
+	    channel.exchangeDeclare(exchange, "fanout");
+	    channel.basicPublish(exchange, "", null, payload.getBytes());
 	    System.out.println(" [x] Sent '" + payload + "'");
 
 	    channel.close();

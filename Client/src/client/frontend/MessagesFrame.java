@@ -31,7 +31,7 @@ public class MessagesFrame extends JDialog implements ActionListener{
 		messagesPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		messagesPane.setEditable(false);
 		try {
-			messagesPane.setText(parent.getController().readMessage());
+			messagesPane.setText(parent.getController().retrieveMessagesFromFile());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class MessagesFrame extends JDialog implements ActionListener{
 		if(event.getSource() == clearMessagesButton) {
 			try {
 				parent.getController().clearMessages();
-				messagesPane.setText(parent.getController().readMessage());
+				messagesPane.setText(parent.getController().retrieveMessagesFromFile());
 			} catch (IOException ex) {
 				JOptionPane.showMessageDialog(parent, "Error clearing messages", "Error", JOptionPane.ERROR_MESSAGE);
 			}

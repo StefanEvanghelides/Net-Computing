@@ -16,20 +16,36 @@ import client.json.JSONObject;
 import client.json.parser.JSONParser;
 import client.json.parser.ParseException;
 
+/**
+ * ComplaintAPI contains the methods to contact the server to send and retrieve complaints
+ */
 
 public class ComplaintAPI {
 
+	/**
+	 * Retrieve the list of complaints from the server
+	 * 
+	 * @param urlString address of the server
+	 * @return list of complaints
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	
 	public ArrayList<Complaint> retrieveComplaintList(String urlString) throws IOException, ParseException {
 		String payload = GET(urlString);
 		ArrayList<Complaint> complaints = deserializeArray(payload);
 		return complaints;
 	}
 	
-	public Complaint retrieveComplaint(String urlString) throws IOException, ParseException {
-		String payload = GET(urlString);
-		Complaint c = deserializeObject(payload);
-		return c;
-	}
+	/**
+	 * Send a complaint to the server
+	 * 
+	 * @param IPHost address of the server
+	 * @param exchange name of the RabbitMQ exchange
+	 * @param c complaint to be sent
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
 	
 	public void sendComplaint(String IPHost, String exchange, Complaint c) throws IOException, TimeoutException {
 		String payload = c.serialize();
@@ -47,14 +63,22 @@ public class ComplaintAPI {
 	    connection.close();
 	}
 	
+	/**
+	 * Set a complaint to be resolved
+	 * 
+	 * @param urlString - address of the server
+	 * @throws IOException
+	 */
+	
 	public void setResolvedComplaint(String urlString) throws IOException {
 		PUT(urlString, "true");
 	}
 	
 	
 	/* RESTful API. */
-		
-    public String GET(String urlString) throws IOException, ParseException {
+	
+	/* GET request */
+    private String GET(String urlString) throws IOException, ParseException {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(urlString);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -72,7 +96,9 @@ public class ComplaintAPI {
 		return result.toString();
 	}
     
-    public void PUT(String urlString, String payload) throws IOException {
+    /* PUT Request */
+    
+    private void PUT(String urlString, String payload) throws IOException {
     	URL url = new URL(urlString);
     	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     	conn.setDoOutput(true);
@@ -91,7 +117,9 @@ public class ComplaintAPI {
         
     }
 
-    public Complaint deserializeObject(String jsonString) throws ParseException {
+    /* Deserializers */
+    
+    private Complaint deserializeComplaint(String jsonString) throws ParseException {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(jsonString);
 			
@@ -115,7 +143,7 @@ public class ComplaintAPI {
 		return new Complaint(id, type, description, timestamp, sender_ip, location, name, resolved);
     }
     
-	public ArrayList<Complaint> deserializeArray(String jsonString) throws ParseException {	
+	private ArrayList<Complaint> deserializeArray(String jsonString) throws ParseException {	
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		
 		JSONParser parser = new JSONParser();
@@ -124,7 +152,7 @@ public class ComplaintAPI {
 		for(int i=0; i<array.size(); i++) {
 			JSONObject obj = (JSONObject) array.get(i);
 			
-			Complaint c = deserializeObject(obj.toJSONString());
+			Complaint c = deserializeComplaint(obj.toJSONString());
 			
 			complaints.add(c);
 		}

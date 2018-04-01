@@ -24,6 +24,11 @@ import client.backend.Complaint;
 import client.backend.Controller;
 import client.json.parser.ParseException;
 
+/**
+ * Client is the main interface for using the program. It displays all complaints on the server, allows users 
+ * to add their own, resolve complaints and send messages to other online clients
+ */
+
 public class Client extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -51,6 +56,9 @@ public class Client extends JFrame implements ActionListener {
 
 	private JPanel contentPanel;
 	
+	/**
+	 * Construct the Client
+	 */
 	public Client() {
 		super("Complaint System");
 
@@ -117,7 +125,6 @@ public class Client extends JFrame implements ActionListener {
 		}
 	}
 
-	/* Getters and Setter */
 	public Controller getController() {
 		return controller;
 	}
@@ -229,7 +236,7 @@ public class Client extends JFrame implements ActionListener {
 		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
 
-	public void updateComplaintInfoPane() {
+	private void updateComplaintInfoPane() {
 		Complaint c = null;
 
 		if (!complaintsList.isSelectionEmpty()) {
@@ -248,6 +255,9 @@ public class Client extends JFrame implements ActionListener {
 		);
 	}
 
+	/**
+	 * Update the list of complaints
+	 */
 	public void updateComplaintsList() {
 		complaints = new ArrayList<Complaint>();
 		

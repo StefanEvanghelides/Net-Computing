@@ -17,6 +17,9 @@ import client.json.JSONObject;
 import client.json.parser.JSONParser;
 import client.json.parser.ParseException;
 
+/**
+ *MessageAPI contains the methods to contact other clients
+ */
 
 public class MessageAPI {
 	private String message;
@@ -25,11 +28,15 @@ public class MessageAPI {
 	private final int PORT = 4002;
 	private final String PATH = "cache/messages.txt";
 	
+	/**
+	 * Construct the MessageAPI
+	 */
+	
 	public MessageAPI() {
 		startServer();
 	}
 	
-	public void startServer() {		
+	private void startServer() {		
 		Runnable serverTask = new Runnable() {
 
 			@Override
@@ -67,6 +74,14 @@ public class MessageAPI {
 
 	}
 	
+	/**
+	 * Send message to other client
+	 * @param IPAddress ip address of the other client
+	 * @param name name of the sender
+	 * @param message content of the message
+	 * @throws IOException
+	 */
+	
 	public void sendMessage(final String IPAddress, final String name, final String message) throws IOException {        
         final Packet p = new Packet(name, message);
 		Runnable clientTask = new Runnable() {
@@ -95,7 +110,7 @@ public class MessageAPI {
        
 	}
 	
-	public Packet parsePacket(String payload) throws ParseException {
+	private Packet parsePacket(String payload) throws ParseException {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(payload);
 		
@@ -107,6 +122,12 @@ public class MessageAPI {
 		return new Packet(name, message);
 	}
 	
+	/**
+	 * Read data from the message file	
+	 * @param path path of the file
+	 * @return data from the file
+	 * @throws IOException
+	 */
 	public String readData(String path) throws IOException {		
 		File f = new File(path);
 		String data = "";
@@ -118,7 +139,7 @@ public class MessageAPI {
 		return data;
 	}
 	
-	public void storeData(Packet packet) throws IOException {
+	private void storeData(Packet packet) throws IOException {
 		if(!Files.isDirectory(Paths.get("cache"))) {
 			Files.createDirectories(Paths.get("cache"));
 		}
@@ -131,6 +152,10 @@ public class MessageAPI {
 		fileWriter.close();  
 	}
 	
+	/**
+	 * Clear data in the message file
+	 * @throws IOException
+	 */
 	public void clearData() throws IOException {
 		if(Files.isDirectory(Paths.get("cache"))) {
 	        FileWriter fileWriter = new FileWriter(PATH);

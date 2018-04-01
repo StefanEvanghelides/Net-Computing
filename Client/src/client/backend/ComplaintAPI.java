@@ -5,16 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
-
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-
 import client.json.JSONArray;
 import client.json.JSONObject;
 import client.json.parser.JSONParser;

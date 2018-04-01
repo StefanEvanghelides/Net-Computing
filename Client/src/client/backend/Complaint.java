@@ -44,15 +44,15 @@ public class Complaint {
 		return "<html>" + type + "  <br/>" + location + "</html>"; 
 	}
 	
-	public String getFullDescription() {
-		return "My complaint:<br/>" +
-			    "  ID = " + id + "<br/>" + 
-				"  Type = " + type + "<br/>" +
-				"  Description = " + description + "<br/>" +
-				"  Sender IP = " + sender_ip + "<br/>" +
-				"  Location = " + location + "<br/>" +
-				"  Name = " + name + "<br/>";
-	}
+//	public String getFullDescription() {
+//		return "My complaint:<br/>" +
+//			    "  ID = " + id + "<br/>" + 
+//				"  Type = " + type + "<br/>" +
+//				"  Description = " + description + "<br/>" +
+//				"  Sender IP = " + sender_ip + "<br/>" +
+//				"  Location = " + location + "<br/>" +
+//				"  Name = " + name + "<br/>";
+//	}
 	
 	/* Getters */
 	

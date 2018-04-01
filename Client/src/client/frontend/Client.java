@@ -50,7 +50,6 @@ public class Client extends JFrame implements ActionListener {
 	private int numComplaintsShown = 10;
 
 	private JPanel contentPanel;
-	private String larsAddress = "http://172.20.10.8:5000/complaints";
 	
 	public Client() {
 		super("Complaint System");
@@ -93,7 +92,7 @@ public class Client extends JFrame implements ActionListener {
 		if (e.getSource() == resolveComplaintButton) {
 			Complaint c = complaintsList.getSelectedValue();
 			try {
-				controller.setResolvedComplaint(larsAddress, c);
+				controller.setResolvedComplaint(c);
 			} catch (IOException error) {
 				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -256,7 +255,7 @@ public class Client extends JFrame implements ActionListener {
 		String showUnresolved = (showUnresolvedCheckBox.isSelected() ? "&resolved=false" : "");		
 		
 		try {
-			complaints = controller.receiveComplaintList(larsAddress + complaintsNum + showUnresolved);
+			complaints = controller.receiveComplaintList(complaintsNum + showUnresolved);
 		} catch (IOException | ParseException e) {
 			JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
 					JOptionPane.ERROR_MESSAGE);

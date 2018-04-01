@@ -14,8 +14,10 @@ public class Controller {
 	private ComplaintAPI complaintAPI;
 	
 	private final String EXCHANGE_NAME = "Complaints";
-	private final String SERVER_IP_ADDRESS = "172.20.10.8";
+	private final String SERVER_IP_ADDRESS = "192.168.178.22";
 	private final String MESSAGES_PATH = "cache/messages.txt";
+	private final String SERVER_PORT = "5000";
+	private final String COMPLAINTS_ENDPOINT = "complaints";
 	
 	public Controller() {
 		messageAPI = new MessageAPI();
@@ -23,18 +25,17 @@ public class Controller {
 	}
 	
 	/* Complaint API part. */
-	public void setResolvedComplaint(String urlString, Complaint c) throws IOException {
+	public void setResolvedComplaint(Complaint c) throws IOException {
 		String id = c.getId();
-		complaintAPI.setResolvedComplaint(urlString + "/" + id + "/resolved");
+		String mainPath = this.getMainPath();
+		String resolvedPath = mainPath + "/" + id + "/resolved";
+		complaintAPI.setResolvedComplaint(resolvedPath);
 	}
 	
 	public ArrayList<Complaint> receiveComplaintList(String endpoint) throws IOException, ParseException {
-		ArrayList<Complaint> c = complaintAPI.retrieveComplaintList(endpoint);
-		return c;
-	}
-	
-	public Complaint receiveComplaint(String endpoint) throws IOException, ParseException {
-		Complaint c = complaintAPI.retrieveComplaint(endpoint);
+		String mainPath = this.getMainPath();
+		String receiveComplaintsPath = mainPath + endpoint;
+		ArrayList<Complaint> c = complaintAPI.retrieveComplaintList(receiveComplaintsPath);
 		return c;
 	}
 	
@@ -73,5 +74,9 @@ public class Controller {
         }
         
         return result;
+	}
+	
+	private String getMainPath() {
+		return "http://" + SERVER_IP_ADDRESS + ":" + SERVER_PORT + "/" + COMPLAINTS_ENDPOINT;
 	}
 }

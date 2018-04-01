@@ -51,9 +51,13 @@ public class MessageAPI {
 		        		clientSocket.close();
 		            }
 		        } catch(Exception e) {
-		        	e.printStackTrace();
+		        	System.err.println(e.getMessage());
 		        } finally {
-		        	
+		        	try {
+						serverSocket.close();
+					} catch (IOException e) {
+						System.err.println(e.getMessage());
+					}
 		        }
 		        
 			}			
@@ -128,9 +132,11 @@ public class MessageAPI {
 	}
 	
 	public void clearData() throws IOException {
-        FileWriter fileWriter = new FileWriter(PATH);
-        fileWriter.write("");
-		fileWriter.close();  		
+		if(Files.isDirectory(Paths.get("cache"))) {
+	        FileWriter fileWriter = new FileWriter(PATH);
+	        fileWriter.write("");
+			fileWriter.close();  
+		}		
 	}
 	
 	/* Getters and setters. */

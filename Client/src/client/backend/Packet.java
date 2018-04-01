@@ -33,7 +33,5 @@ public class Packet {
 	}
 	
 	@Override
-	public String toString() {
-		return name + ": " + message + "\n";
-	}
+	public String toString() {return name + ": " + message + "\n";}
 }

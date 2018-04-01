@@ -8,14 +8,47 @@ import client.json.JSONObject;
  */
 
 public class Complaint {
+	/**
+	 * ID of the complaint, set on the server
+	 */
 	private String id;
+	
+	/**
+	 * Type of the complaint
+	 */
 	private String type;
+	
+	/**
+	 * Description of the complaint
+	 */
 	private String description;
+	
+	/**
+	 * IP address of the complainer
+	 */
 	private String sender_ip;
+	
+	/**
+	 * Location of the complaint
+	 */
 	private String location;
+	
+	/**
+	 * Name of the complainer
+	 */
 	private String name;
+	
+	/**
+	 * Whether the complaint has been resolved
+	 */
 	private String resolved;
+	
+	/**
+	 * Time when the complaint was sent, set on the server
+	 */
 	private String timestamp;
+	
+	
 	
 	/**
 	 * Complaint constructor
@@ -72,18 +105,9 @@ public class Complaint {
 		return "<html>" + type + "  <br/>" + location + "</html>"; 
 	}
 	
-//	public String getFullDescription() {
-//		return "My complaint:<br/>" +
-//			    "  ID = " + id + "<br/>" + 
-//				"  Type = " + type + "<br/>" +
-//				"  Description = " + description + "<br/>" +
-//				"  Sender IP = " + sender_ip + "<br/>" +
-//				"  Location = " + location + "<br/>" +
-//				"  Name = " + name + "<br/>";
-//	}
+	
 	
 	/* Getters */
-	
 	public String getId() {return this.id;}
 	public String getType() {return this.type;}
 	public String getName() {return this.name;}

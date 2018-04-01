@@ -22,11 +22,27 @@ import client.json.parser.ParseException;
  */
 
 public class MessageAPI {
+	/**
+	 * Last message received
+	 */
 	private String message;
+	
+	/**
+	 * Socket to send and receive messages
+	 */
 	private ServerSocket serverSocket;
 	
+	/**
+	 * Computer port to use for socket
+	 */
 	private final int PORT = 4002;
+	
+	/**
+	 * Location of the messages file
+	 */
 	private final String PATH = "cache/messages.txt";
+	
+	
 	
 	/**
 	 * Construct the MessageAPI
@@ -36,6 +52,9 @@ public class MessageAPI {
 		startServer();
 	}
 	
+	/**
+	 * Start Listening for messages
+	 */
 	private void startServer() {		
 		Runnable serverTask = new Runnable() {
 
@@ -110,6 +129,12 @@ public class MessageAPI {
        
 	}
 	
+	/**
+	 * Create packet from serialized data
+	 * @param payload serialized data
+	 * @return packet containing deserialized data
+	 * @throws ParseException
+	 */
 	private Packet parsePacket(String payload) throws ParseException {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = (JSONObject) parser.parse(payload);
@@ -139,6 +164,11 @@ public class MessageAPI {
 		return data;
 	}
 	
+	/**
+	 * Store data in messages file
+	 * @param packet packet containing data to be stored
+	 * @throws IOException
+	 */
 	private void storeData(Packet packet) throws IOException {
 		if(!Files.isDirectory(Paths.get("cache"))) {
 			Files.createDirectories(Paths.get("cache"));
@@ -164,20 +194,10 @@ public class MessageAPI {
 		}		
 	}
 	
-	/* Getters and setters. */
-	public String getMessage() {
-		return this. message;
-	}
+
 	
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public ServerSocket getServerSocket() {
-		return this.serverSocket;
-	}
-	
-	public void setServerSocket(ServerSocket ss) {
-		this.serverSocket = ss;
-	}
+	public String getMessage() {return this. message;}
+	public void setMessage(String message) {this.message = message;}
+	public ServerSocket getServerSocket() {return this.serverSocket;}
+	public void setServerSocket(ServerSocket ss) {this.serverSocket = ss;}
 }

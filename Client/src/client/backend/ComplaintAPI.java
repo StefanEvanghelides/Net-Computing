@@ -77,7 +77,13 @@ public class ComplaintAPI {
 	
 	/* RESTful API. */
 	
-	/* GET request */
+	/**
+	 * Perform the GET request to the server
+	 * @param urlString server address
+	 * @return Serialized data
+	 * @throws IOException
+	 * @throws ParseException
+	 */
     private String GET(String urlString) throws IOException, ParseException {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(urlString);
@@ -96,8 +102,12 @@ public class ComplaintAPI {
 		return result.toString();
 	}
     
-    /* PUT Request */
-    
+    /**
+     * Perform the PUT request to the server
+     * @param urlString server address
+     * @param payload data to update
+     * @throws IOException
+     */
     private void PUT(String urlString, String payload) throws IOException {
     	URL url = new URL(urlString);
     	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -117,7 +127,12 @@ public class ComplaintAPI {
         
     }
 
-    /* Deserializers */
+    /**
+     * Deserialize a complaint
+     * @param jsonString serialized complaint
+     * @return deserialized complaint
+     * @throws ParseException
+     */
     
     private Complaint deserializeComplaint(String jsonString) throws ParseException {
 		JSONParser parser = new JSONParser();
@@ -143,6 +158,12 @@ public class ComplaintAPI {
 		return new Complaint(id, type, description, timestamp, sender_ip, location, name, resolved);
     }
     
+    /**
+     * Deserialize list of complaints
+     * @param jsonString Serialized list of complaints
+     * @return deserialized list of complaints
+     * @throws ParseException
+     */
 	private ArrayList<Complaint> deserializeArray(String jsonString) throws ParseException {	
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		

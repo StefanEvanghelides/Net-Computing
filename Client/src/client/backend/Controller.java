@@ -14,14 +14,42 @@ import client.json.parser.ParseException;
  */
 
 public class Controller {
+	/**
+	 * MessageAPI to deal with messages between clients
+	 */
 	private MessageAPI messageAPI;
+	
+	/**
+	 * ComplaintAPI to deal with sending and receiving complaints
+	 */
 	private ComplaintAPI complaintAPI;
 	
+	/**
+	 * Name of the RabbitMQ exchange
+	 */
 	private final String EXCHANGE_NAME = "Complaints";
+	
+	/**
+	 * IP Address of the server
+	 */
 	private final String SERVER_IP_ADDRESS = "192.168.178.22";
+	
+	/**
+	 * Path to the messages file
+	 */
 	private final String MESSAGES_PATH = "cache/messages.txt";
+	
+	/**
+	 * Port the server is using
+	 */
 	private final String SERVER_PORT = "5000";
+	
+	/**
+	 * Name of the REST endpoint for the complaints list
+	 */
 	private final String COMPLAINTS_ENDPOINT = "complaints";
+	
+	
 	
 	/**
 	 * Construct the controller
@@ -130,6 +158,10 @@ public class Controller {
         return result;
 	}
 
+	/**
+	 * Construct the full server path
+	 * @return
+	 */
 	private String getMainPath() {
 		return "http://" + SERVER_IP_ADDRESS + ":" + SERVER_PORT + "/" + COMPLAINTS_ENDPOINT;
 	}

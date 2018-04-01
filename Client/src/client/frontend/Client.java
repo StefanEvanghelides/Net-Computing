@@ -37,10 +37,15 @@ public class Client extends JFrame implements ActionListener {
 		new Client();
 	}
 
+	/**
+	 * Controller to handle all input to the client
+	 */
 	private Controller controller;
 
+	/* UI Components */
 	private ArrayList<Complaint> complaints;
 	private SpringLayout layout;
+	private JPanel contentPanel;
 	private JList<Complaint> complaintsList;
 	private JScrollPane complaintsListPane;
 	private JButton refreshComplaintsListButton;
@@ -52,9 +57,10 @@ public class Client extends JFrame implements ActionListener {
 	private JCheckBox showUnresolvedCheckBox;
 	private JComboBox<String> showNumberOfComplaints;
 	
+	/**
+	 * Number of complaints to show in the list. Can be changed on the UI.
+	 */
 	private int numComplaintsShown = 10;
-
-	private JPanel contentPanel;
 	
 	/**
 	 * Construct the Client
@@ -125,10 +131,9 @@ public class Client extends JFrame implements ActionListener {
 		}
 	}
 
-	public Controller getController() {
-		return controller;
-	}
-
+	/**
+	 * Initialise all the buttons on the UI
+	 */
 	private void initialiseButtons() {
 		refreshComplaintsListButton = new JButton("Refresh");
 		refreshComplaintsListButton.setFocusPainted(false);
@@ -172,6 +177,9 @@ public class Client extends JFrame implements ActionListener {
 		contentPanel.add(seeMessagesButton);
 	}
 
+	/**
+	 * Initialise the complaints info pane
+	 */
 	private void initialiseComplaintInfoPane() {
 		complaintInfoPane = new JTextPane();
 		complaintInfoPane.setEditable(false);
@@ -179,7 +187,9 @@ public class Client extends JFrame implements ActionListener {
 		contentPanel.add(complaintInfoPane);
 	}
 
-	/* Private helpers */
+	/**
+	 * Initialise the complants list
+	 */
 	private void initialiseComplaintsList() {
 		complaintsList = new JList<Complaint>();
 		complaintsList.setFixedCellHeight(40);
@@ -200,6 +210,9 @@ public class Client extends JFrame implements ActionListener {
 		contentPanel.add(complaintsListPane);
 	}
 
+	/**
+	 * Set up the SpringLayout constraints
+	 */
 	private void initializeConstraints() {
 		layout.putConstraint(SpringLayout.NORTH, complaintsListPane, 10, SpringLayout.NORTH, contentPanel);
 		layout.putConstraint(SpringLayout.WEST, complaintsListPane, 10, SpringLayout.WEST, contentPanel);
@@ -236,6 +249,9 @@ public class Client extends JFrame implements ActionListener {
 		layout.putConstraint(SpringLayout.EAST, complaintInfoPane, -10, SpringLayout.EAST, contentPanel);
 	}
 
+	/**
+	 * Update the complaint info pane
+	 */
 	private void updateComplaintInfoPane() {
 		Complaint c = null;
 
@@ -281,5 +297,9 @@ public class Client extends JFrame implements ActionListener {
 
 		updateComplaintInfoPane();
 	}
+	
+
+	
+	public Controller getController() {return controller;}
 
 }

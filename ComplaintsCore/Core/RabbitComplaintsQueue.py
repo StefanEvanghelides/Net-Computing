@@ -22,7 +22,6 @@ class RabbitComplaintsQueue(ComplaintsQueue):
     def connect(self):
         print("Starting rabbit mq connection")
         self.channel.start_consuming()
-        self.consume(self.call)
 
     def consume(self, callback):
         self.channel.basic_consume(callback,

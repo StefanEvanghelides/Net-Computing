@@ -6,6 +6,10 @@ from API.endpoints.Complaint import db
 
 class Complaints(Resource):
     def get(self):
+        """
+        Get a list of complaints from the database
+        :return: list of complaints
+        """
         count_string = request.args.get('count')
         if count_string is None:
             count = 10

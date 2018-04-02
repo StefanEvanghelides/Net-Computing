@@ -1,6 +1,6 @@
 from flask_restplus import Resource
 
-from API.endpoints.Complaint import db
+from endpoints.Complaint import db
 
 class Complaint(Resource):
     def get(self,complaint_id):

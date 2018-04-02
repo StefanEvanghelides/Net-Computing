@@ -1,9 +1,9 @@
 from flask_restplus import Api
 
-from API.endpoints.Complaint.complaint import Complaint
-from API.endpoints.Complaint.complaints import Complaints
-from API.endpoints.Complaint.resolved import Resolved
-from API.endpoints.Complaint.sender_info import SenderInfo
+from endpoints.Complaint.complaint import Complaint
+from endpoints.Complaint.complaints import Complaints
+from endpoints.Complaint.resolved import Resolved
+from endpoints.Complaint.sender_info import SenderInfo
 
 API = Api(
     version='0.1'

@@ -1,7 +1,7 @@
 from flask import json, request
 from flask_restplus import Resource
 
-from API.endpoints.Complaint import db
+from endpoints.Complaint import db
 
 
 class Complaints(Resource):

@@ -1,7 +1,7 @@
 from flask import request, abort
 from flask_restplus import Resource
 
-from API.endpoints.Complaint import db
+from endpoints.Complaint import db
 
 
 class Resolved(Resource):
@@ -30,5 +30,3 @@ class Resolved(Resource):
         except Exception as e:
             abort(500, 'Exception thrown in setting the resolved value')
         return
-
-

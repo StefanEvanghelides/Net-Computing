@@ -1,0 +1,19 @@
+{
+    "smtp" : {
+        "server":'smtp.gmail.com:587',
+        "email":'complaintssolvers@gmail.com',
+        "password":'NetComputing2018'
+    },
+    "receivers" :[
+        {
+            "street" : "Wassenberghstraat",
+            "count" : 1000,
+            "email" : "larsholdijk@gmail.com"
+        },
+        {
+            "street" : "Esdoornlaan",
+            "count" : 2,
+            "email" : "s.evanghelides@student.rug.nl"
+        }
+    ]
+}

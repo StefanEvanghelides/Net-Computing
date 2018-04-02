@@ -1,7 +1,7 @@
 import json
 
 from datetime import datetime
-from interfaces.ComplaintsHandler import ComplaintsHandler
+from Core.interfaces.ComplaintsHandler import ComplaintsHandler
 
 
 class DatabaseComplaintHandler(ComplaintsHandler):

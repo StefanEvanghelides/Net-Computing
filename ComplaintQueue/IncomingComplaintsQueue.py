@@ -1,6 +1,6 @@
-from MongoComplaintsDatabase import MongoComplaintsDatabase
+from Core.MongoComplaintsDatabase import MongoComplaintsDatabase
 from DatabaseComplaintHandler import DatabaseComplaintHandler
-from RabbitComplaintsQueue import RabbitComplaintsQueue
+from Core.RabbitComplaintsQueue import RabbitComplaintsQueue
 
 db = MongoComplaintsDatabase("localhost", 27017, "ComplaintsQueue", "Complaints")
 queue = RabbitComplaintsQueue("localhost", exchange="Complaints")

@@ -1,6 +1,6 @@
 import pika
 
-from interfaces.ComplaintsQueue import ComplaintsQueue
+from Core.interfaces.ComplaintsQueue import ComplaintsQueue
 
 class RabbitComplaintsQueue(ComplaintsQueue):
     """

@@ -1,7 +1,7 @@
 from bson import ObjectId
 from pymongo import MongoClient, DESCENDING
 
-from interfaces.ComplaintsDatabase import ComplaintsDatabase
+from Core.interfaces.ComplaintsDatabase import ComplaintsDatabase
 
 
 class MongoComplaintsDatabase(ComplaintsDatabase):
@@ -24,4 +24,3 @@ class MongoComplaintsDatabase(ComplaintsDatabase):
 
     def get_all(self, querry):
         return list(self.collection.find(querry).sort('timestamp', DESCENDING))
-

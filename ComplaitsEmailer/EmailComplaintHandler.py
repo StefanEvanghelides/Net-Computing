@@ -1,7 +1,7 @@
 import json
 
 from smtplib import SMTP
-from interfaces.ComplaintsHandler import ComplaintsHandler
+from Core.interfaces.ComplaintsHandler import ComplaintsHandler
 
 
 class EmailComplaintHandler(ComplaintsHandler):
@@ -96,7 +96,3 @@ class EmailComplaintHandler(ComplaintsHandler):
         server.login(user=from_email, password=password)
         server.sendmail(from_addr=from_email, to_addrs=to_email, msg=str(message))
         server.quit()
-
-
-
-

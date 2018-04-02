@@ -1,5 +1,5 @@
 from EmailComplaintHandler import EmailComplaintHandler
-from RabbitComplaintsQueue import RabbitComplaintsQueue
+from Core.RabbitComplaintsQueue import RabbitComplaintsQueue
 
 config = eval(open('config', 'r').read())
 

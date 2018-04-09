@@ -82,7 +82,7 @@ public class AddComplaintFrame extends JDialog implements ActionListener {
 						description.getText(), IPAddress,
 						location.getText(), name.getText());
 			} catch (IOException | TimeoutException e) {
-				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+				JOptionPane.showMessageDialog(this, "Cannot send complaint. Please try again later", "Connection Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}

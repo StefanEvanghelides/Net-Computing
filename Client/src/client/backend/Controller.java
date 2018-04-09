@@ -32,7 +32,7 @@ public class Controller {
 	/**
 	 * IP Address of the server
 	 */
-	private final String SERVER_IP_ADDRESS = "192.168.178.22";
+	private final String SERVER_IP_ADDRESS = "172.20.10.8";
 	
 	/**
 	 * Path to the messages file

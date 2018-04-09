@@ -108,7 +108,7 @@ public class Client extends JFrame implements ActionListener {
 			try {
 				controller.setResolvedComplaint(c);
 			} catch (IOException error) {
-				JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+				JOptionPane.showMessageDialog(this, "Cannot resolve: error connecting to server", "Connection Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 			updateComplaintsList();
@@ -283,7 +283,7 @@ public class Client extends JFrame implements ActionListener {
 		try {
 			complaints = controller.receiveComplaintList(complaintsNum + showUnresolved);
 		} catch (IOException | ParseException e) {
-			JOptionPane.showMessageDialog(this, "Error connecting to server", "Connection Error",
+			JOptionPane.showMessageDialog(this, "Error refreshing complaints list", "Connection Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 
